@@ -50,7 +50,7 @@ app.post('/login', async(req, res) => {
     if(status == true){
         res.redirect('/amm')
     }else {
-        res.redirect('/?status=Hibás felhasználónév vagy jelszó');
+        res.redirect('/?error=1');
     }
 });
 app.post('/register', (req, res) => {
