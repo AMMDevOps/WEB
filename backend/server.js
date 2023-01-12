@@ -4,6 +4,7 @@
  // APP  \\
 let express = require('express');
 let app = express();
+app.set('view engine', 'ejs');
 app.listen(3000, () => {console.log('Server started on port 3000');});
 
     //\\
@@ -36,9 +37,15 @@ let path = require('path');
     //\\
    //  \\
   //====\\
+ // CRYP \\
+const bcrypt = require('bcrypt');
+
+    //\\
+   //  \\
+  //====\\
  // GET  \\
-app.get('/', (req, res) => {res.sendFile(path.join(__dirname, 'public', 'index.html'));});
-app.get('/amm', (req, res) => {res.sendFile(path.join(__dirname, 'public', 'main.html'));});
+app.get('/', (req, res) => {res.render(path.join(__dirname, 'public', 'index.ejs'), { name: 'Kyle' });});
+app.get('/amm', (req, res) => {res.render(path.join(__dirname, 'public', 'main.ejs'));});
 
     //\\
    //  \\
