@@ -41,7 +41,7 @@ app.get('/js', (req, res) => {
 });
 
 app.get('/main', async(req, res) => {
-    let data = await functions.checkAuthed(req.cookies, client);
+    let data = await functions.checkAuth(req.cookies, client);
     if (data.status == true) {      
         res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
     }

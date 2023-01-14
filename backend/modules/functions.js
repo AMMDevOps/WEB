@@ -30,7 +30,7 @@ let genAuth = async (data, db) => {
 
 }
 
-let checkAuthed = async (data, db) => {
+let checkAuth = async (data, db) => {
     let username = data.username;
     let auth = data.auth;
     let sql = `SELECT * FROM users WHERE username = '${username}'`;
@@ -55,7 +55,7 @@ let genUser = (data, db) => {
 }
 
 module.exports = {
-    checkAuthed,
+    checkAuth,
     checkUser,
     genUser
 };
