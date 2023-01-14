@@ -1,11 +1,16 @@
 const express = require('express');
 const app = express();
-const session = require('express-session');
 const path = require('path');
+const session = require('express-session');
+const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser')
 
 
 app.set('view engine', 'ejs');
-app.use(express.cookieParser());
+app.use(cookieSession({
+    keys: ['secret1', 'secret2']
+}));
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(session({
@@ -35,14 +40,20 @@ app.get('/js', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Scripts', 'main.js'));
 });
 
-app.get('/main', (req, res) => {
-    res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.session.username });
+app.get('/main', async(req, res) => {
+    let data = await functions.checkAuthed(req.cookies, client);
+    if (data.status == true) {      
+        res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
+    }
+    else {
+        res.redirect('/');
+    }
 });
 
 app.post('/login', async(req, res) => {
-    let status = await functions.checkUser(req.body, client)
-    console.log(status);
-    if(status == true){
+    let ui = await functions.checkUser(req.body, client)
+    if(ui.status == true){
+        res.cookie('auth', data.data.auth);
         res.cookie('username', req.body.username);
         res.redirect(`/main`);
     } else {
