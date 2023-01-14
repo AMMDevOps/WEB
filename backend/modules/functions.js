@@ -36,6 +36,8 @@ let checkAuthed = async (data, db) => {
     let auth = data.auth;
     let sql = `SELECT * FROM users WHERE username = '${username}'`;
     let result = await db.query(sql);
+    console.log(result);
+    console.log(auth);
     if (result.rows[0].auth == auth){return {auth: auth, username: username, status: true};}
     else {return {auth: auth, username: username, status: false};}
 }
