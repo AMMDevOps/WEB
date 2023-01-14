@@ -34,7 +34,6 @@ client.connect();
 
 app.get('/', (req, res) => {
     res.render(path.join(__dirname, 'views', 'index.ejs'));
-    console.log("1. Cookies: ", req.cookies);
 });
 
 app.get('/js', (req, res) => {
@@ -42,7 +41,6 @@ app.get('/js', (req, res) => {
 });
 
 app.get('/main', async(req, res) => {
-    console.log("3. Cookies: ", req.cookies);
     let data = await functions.checkAuthed(req.cookies, client);
     if (data.status == true) {      
         res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
@@ -53,7 +51,6 @@ app.get('/main', async(req, res) => {
 });
 
 app.post('/login', async(req, res) => {
-    console.log("2. Cookies: ", req.cookies);
     let ui = await functions.checkUser(req.body, client)
     if(ui.status == true){
         res.cookie('auth', ui.data.auth);
