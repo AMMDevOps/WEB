@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const path = require('path');
 
 
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(session({
@@ -27,23 +28,22 @@ client.connect();
 
 
 app.get('/', (req, res) => {
-    res.render('index.ejs');
+    res.render(path.join(__dirname, 'views', 'index.ejs'));
 });
 
 app.get('/js', (req, res) => {
-    res.sendFile('Scripts/main.js');
+    res.sendFile(path.join(__dirname, 'public', 'Scripts', 'main.js'));
 });
 
 app.get('/main', (req, res) => {
-    res.render('main.ejs', { name: req.session.username });
+    res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.session.username });
 });
 
 app.post('/login', async(req, res) => {
     let status = await functions.checkUser(req.body, client)
     console.log(status);
     if(status == true){
-        req.session.username = req.body.username;
-        res.end(req.session.username);
+        res.cookie('username', req.body.username);
         res.redirect(`/main`);
     } else {
         res.redirect('/');
