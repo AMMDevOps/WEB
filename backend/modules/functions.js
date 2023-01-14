@@ -15,13 +15,13 @@ let checkUser = async (data, db) => {
     let password = data.password;
     let sql = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
     let result = await db.query(sql);
-    auth = await checkAuth(result.rows[0], db);
+    auth = await genAuth(result.rows[0], db);
 
     if (result.rows.length > 0){return {data: auth, status:true};}
     else {return {data: false, status: false};}
 }
 
-let checkAuth = async (data, db) => {
+let genAuth = async (data, db) => {
     let username = data.username;
     let authkey = await bycript.hashSync(genKey(), 1);
     let sql = `UPDATE users SET auth = '${authkey}' WHERE username = '${username}'`;
