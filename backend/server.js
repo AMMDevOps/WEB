@@ -5,21 +5,9 @@ const session = require('express-session');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
 
+const functions = require('./modules/functions');
 
-app.set('view engine', 'ejs');
-app.use(cookieSession({
-    keys: ['secret1', 'secret2']
-}));
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false
-}));
 
-let functions = require('./modules/functions');
 
 const { Client } = require('pg');
 const client = new Client({
@@ -30,6 +18,23 @@ const client = new Client({
     password: 'admin'
 });
 client.connect();
+
+
+app.set('view engine', 'ejs');
+
+
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(cookieSession({
+    keys: ['secret1', 'secret2']
+}));
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    saveUninitialized: false
+}));
+
 
 
 app.get('/', (req, res) => {
@@ -50,6 +55,18 @@ app.get('/main', async(req, res) => {
     }
 });
 
+app.post('/lamp', (req, res) => {
+    functions.lamp(req.body);
+    res.redirect('/main');
+});
+
+app.post('/logout', (req, res) => {
+    console.log('logout');
+    res.clearCookie('auth');
+    res.clearCookie('username');
+    res.redirect('/');
+});
+
 app.post('/login', async(req, res) => {
     let ui = await functions.checkUser(req.body, client)
     if(ui.status == true){
@@ -65,5 +82,7 @@ app.post('/register', (req, res) => {
     functions.genUser(req.body, client);
     res.redirect('/'); 
 });
+
+
 
 app.listen(3000, () => {console.log('Server started on port 3000');});

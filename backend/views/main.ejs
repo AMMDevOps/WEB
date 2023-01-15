@@ -12,8 +12,19 @@
       <h1><%= name %></h1>
    <% } %>
    <h1>Home Page</h1>
+   <form action="/lamp" method="post">
+      <input type="radio" id="onR" name="lamp" value="onRed">
+      <label for="onR">Red</label>
+      <input type="radio" id="onG" name="lamp" value="onGreen">
+      <label for="onG">Green</label>
+      <input type="radio" id="onB" name="lamp" value="onBlue">
+      <label for="onB">Blue</label>
+      <input type="radio" id="off" name="lamp" value="off">
+      <label for="off">Off</label>
+      <input type="submit" value="Submit">
+   </form>
    <form action="/logout" method="post">
-      <button type="submit">Logout</button>
+      <button type="submit" value="logout">Logout</button>
    </form>
 </body>
 </html>

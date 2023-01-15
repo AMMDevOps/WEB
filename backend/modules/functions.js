@@ -15,6 +15,7 @@ let checkUser = async (data, db) => {
     let password = data.password;
     let sql = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
     let result = await db.query(sql);
+    console.log(result.rows[0]);
     auth = await genAuth(result.rows[0], db);
 
     if (result.rows.length > 0){return {data: auth, status:true};}
@@ -39,8 +40,6 @@ let checkAuth = async (data, db) => {
     else {return {auth: auth, username: username, status: false};}
 }
 
-
-
 //Reg user
 let genUser = (data, db) => {
     let username = data.username;
@@ -54,7 +53,30 @@ let genUser = (data, db) => {
     }else {return false;}
 }
 
+let lamp = (data) => {
+    let state = data.lamp
+    switch (state) {
+        case "onRed":
+            console.log('onRed');
+            break;
+        case "onGreen":
+            console.log('onGreen');
+            break;
+        case "onBlue":
+            console.log('onBlue');
+            break;
+        case "off":
+            console.log('off');
+            break;
+    
+        default:
+            break;
+    }
+}
+
+
 module.exports = {
+    lamp,
     checkAuth,
     checkUser,
     genUser
