@@ -11,5 +11,9 @@
    <% if(locals.name != (null || "")) { %>
       <h1><%= name %></h1>
    <% } %>
+   <h1>Home Page</h1>
+   <form action="/logout" method="post">
+      <button type="submit">Logout</button>
+   </form>
 </body>
 </html>
