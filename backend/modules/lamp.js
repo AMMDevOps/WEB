@@ -1,11 +1,11 @@
-const { SerialPort } = require('serialport');
+const SerialPort = require('serialport');
 
-const port = new SerialPort({path: 'COM3', baudRate: 9600});
+const port = new SerialPort('COM3', 9600);
 port.on('open', function() {
     console.log('Port is open');
     const data = new Buffer.from('aa\n', 'utf-8')
     console.log(data);
-    port.write(Buffer([0x02]));
+    port.write(data);
     console.log('message written');
 });
 
