@@ -5,7 +5,7 @@ port.on('open', function() {
     console.log('Port is open');
     const data = new Buffer.from('aa\n', 'utf-8')
     console.log(data);
-    port.write(myPort.write(Buffer([0x02])));
+    port.write(Buffer([0x02]));
     console.log('message written');
 });
 
