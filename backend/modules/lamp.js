@@ -1,13 +1,26 @@
-const { SerialPort }= require('serialport');
-const Readline = require('@serialport/parser-readline');
+const { SerialPort } = require('serialport');
 
-const port = new SerialPort({path:'COM3', baudRate: 9600 });
-const parser = port.pipe(new Readline({ delimiter: '\n' }));
-// Read the port data
+const port = new SerialPort({path: 'COM3', baudRate: 9600});
+port.on('open', function() {
+    console.log('Port is open');
+    const data = new Buffer.from('aa\n', 'utf-8')
+    console.log(data);
+    port.write(myPort.write(Buffer([0x02])));
+    console.log('message written');
+});
 
-port.on("open", () => {
-  console.log('serial port open');
+port.on('error', function (data) {
+    console.log('Error: ', data);
 });
-parser.on('data', data =>{
-  console.log('got word from arduino:', data);
+
+port.on('data', function (data) {
+    console.log('Data: ', data);
 });
+
+port.on('close', function (data) {
+    console.log('Port is closed');
+});
+
+setTimeout(function() {
+    port.close();
+}, 3000);
