@@ -1,6 +1,6 @@
 var SerialPort = require("serialport");
-var port = "COM1";
-var message = "Hakuna Matata";
+var port = "COM3";
+var message = "alma";
 
 var serialPort = new SerialPort(port, {
   baudRate: 9600
