@@ -1,6 +1,6 @@
 const SerialPort = require('serialport');
-
 const port = new SerialPort('COM3', 9600);
+
 port.on('open', function() {
     console.log('Port is open');
     const data = new Buffer.from('aa\n', 'utf-8')
