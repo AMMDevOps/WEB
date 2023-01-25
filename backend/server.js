@@ -18,9 +18,8 @@ serialport.on('open', () => {
 
 serialport.on('data', (data) => {
     console.log('Data: ', data.toString());
-    if (data.toString() == 'D') {
-        serialport.write('Alma');
-    }
+    serialport.write('Alma');
+
 });
 
 

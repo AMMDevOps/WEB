@@ -1,7 +1,7 @@
 #include <LiquidCrystal.h>
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
-String stra;
+String str = "";
 
 void setup() {
   Serial.begin(9600);
@@ -9,10 +9,10 @@ void setup() {
 }
 
 void loop() {
-  Serial.write(Serial.available());
-  lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print(Serial.available());
-  lcd.setCursor(0, 1);
-  lcd.print(Serial.readString());
-}
+  str = Serial.readString();
+  lcd.clear();
+  lcd.print(str);
+  Serial.write(Serial.available());
+  delay(1000);
+  }
