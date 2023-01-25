@@ -9,7 +9,7 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("DATA");
+  Serial.println("D");
   while (Serial.available() == 0) {
     delay(100);
   }
