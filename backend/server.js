@@ -71,7 +71,7 @@ app.get('/main', async(req, res) => {
 });
 
 app.post('/lamp', (req, res) => {
-    functions.lamp(req.body);
+    functions.lamp(req.body, serialport);
     res.redirect('/main');
 });
 

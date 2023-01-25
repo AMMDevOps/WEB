@@ -53,20 +53,24 @@ let genUser = (data, db) => {
     }else {return false;}
 }
 
-let lamp = (data) => {
+let lamp = (data, serialport) => {
     let state = data.lamp
     switch (state) {
         case "onRed":
             console.log('onRed');
+            serialport.write('onRed');
             break;
         case "onGreen":
             console.log('onGreen');
+            serialport.write('onGreen');
             break;
         case "onBlue":
             console.log('onBlue');
+            serialport.write('onBlue');
             break;
         case "off":
             console.log('off');
+            serialport.write('off');
             break;
     
         default:
