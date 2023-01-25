@@ -13,12 +13,14 @@ const { SerialPort } = require('serialport')
 const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
 serialport.on('open', () => {
     console.log('Serial port open');
-    
+    serialport.write('Alma');
 });
 
 serialport.on('data', (data) => {
     console.log('Data: ', data.toString());
-    serialport.write('Alma');
+    if (data.toString() == 'DATA') {
+        serialport.write('Alma');
+    }
 });
 
 

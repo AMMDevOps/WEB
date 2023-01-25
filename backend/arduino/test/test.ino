@@ -9,10 +9,13 @@ void setup() {
 }
 
 void loop() {
+  Serial.println("DATA");
+  while (Serial.available() == 0) {
+    delay(100);
+  }
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(Serial.available());
   lcd.setCursor(0, 1);
   lcd.print(Serial.readString());
-  delay(1000);
 }
