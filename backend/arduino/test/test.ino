@@ -11,8 +11,11 @@ void setup() {
 void loop() {
   lcd.setCursor(0, 0);
   str = Serial.readString();
-  lcd.clear();
-  lcd.print(str);
+  if (str != "")
+  {
+    lcd.clear();
+    lcd.print(str);
+  }
   Serial.write(Serial.available());
   delay(1000);
   }
