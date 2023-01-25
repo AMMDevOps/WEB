@@ -7,6 +7,16 @@ const cookieParser = require('cookie-parser')
 
 const functions = require('./modules/functions');
 
+const { SerialPort } = require('serialport')
+const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
+serialport.on('open', () => {
+    console.log('Serial port open')
+    serialport.write('aA\n')
+    serialport.on('data', (data) => {
+        console.log('Data: ', data);
+    });
+});
+
 
 
 const { Client } = require('pg');

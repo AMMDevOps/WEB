@@ -1,5 +1,7 @@
-const SerialPort = require('serialport');
-const port = new SerialPort('COM3', 9600);
+import { SerialPort } from 'serialport'
+
+const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 })
+serialport.write('ROBOT POWER ON')
 
 port.on('open', function() {
     console.log('Port is open');
