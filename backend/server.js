@@ -12,17 +12,8 @@ const { SerialPort } = require('serialport')
 
 const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
 serialport.on('open', () => {
-    console.log('Serial port open')
-    let data = new Buffer.from("A")
-    console.log(data);
-    serialport.write(data)
+    console.log('Serial port open');
     
-});
-serialport.write('A', function(err) {
-    if (err) {
-      return console.log('Error on write: ', err.message)
-    }
-    console.log('sent')
 });
 
 serialport.on('data', (data) => {

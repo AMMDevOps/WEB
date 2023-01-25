@@ -11,8 +11,8 @@ void setup() {
 void loop() {
   lcd.clear();
   lcd.setCursor(0, 0);
-  stra = "";
-  stra = Serial.readString();
-  lcd.print(stra);
-  Serial.println(stra);
+  lcd.print(Serial.available());
+  lcd.setCursor(0, 1);
+  lcd.print(Serial.readString());
+  delay(1000);
 }
