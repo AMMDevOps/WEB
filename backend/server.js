@@ -14,7 +14,7 @@ serialport.on('open', () => {
     console.log('Serial port open')
     let data = new Buffer.from('ker\n', 'utf-8')
     console.log(data);
-    serialport.port.write(data)
+    serialport.write(data)
     
 });
 serialport.on('data', (data) => {
