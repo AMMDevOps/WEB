@@ -12,7 +12,7 @@ const { SerialPort } = require('serialport')
 const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
 serialport.on('open', () => {
     console.log('Serial port open')
-    let data = new Buffer.from('ker\n', 'utf-8')
+    let data = new Buffer.from("A\n", )
     console.log(data);
     serialport.write(data)
     
