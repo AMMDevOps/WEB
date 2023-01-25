@@ -9,7 +9,7 @@ void setup() {
 }
 
 void loop() {
-  Serial.println(Serial.available());
+  Serial.write(Serial.available());
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(Serial.available());
