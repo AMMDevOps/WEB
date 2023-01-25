@@ -26,7 +26,7 @@ serialport.write('A', function(err) {
 });
 
 serialport.on('data', (data) => {
-    console.log('Data: ', data.toString());
+    console.log('Data: ', data);
     serialport.write('Alma');
 });
 
