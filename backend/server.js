@@ -7,14 +7,18 @@ const cookieParser = require('cookie-parser')
 
 const functions = require('./modules/functions');
 
+
 const { SerialPort } = require('serialport')
 const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
 serialport.on('open', () => {
     console.log('Serial port open')
-    serialport.write('aA\n')
-    serialport.on('data', (data) => {
-        console.log('Data: ', data);
-    });
+    let data = new Buffer.from('ker\n', 'utf-8')
+    console.log(data);
+    serialport.port.write(data)
+    
+});
+serialport.on('data', (data) => {
+    console.log('Data: ', data.toString());
 });
 
 
