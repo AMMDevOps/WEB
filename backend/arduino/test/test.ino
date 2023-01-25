@@ -9,10 +9,7 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("D");
-  while (Serial.available() == 0) {
-    delay(100);
-  }
+  Serial.println(Serial.available());
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(Serial.available());
