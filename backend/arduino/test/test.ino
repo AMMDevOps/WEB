@@ -5,12 +5,16 @@ String str = "";
 String msg = "";
 String name = "";
 
+int notification = 0;
+
 int index = 0;
 int length_of_msg = 0;
 
 const int ledRed = 10;
 const int ledBlue = 9;
 const int ledGreen = 6;
+
+const int button = 7;
 
 int redValue = 0;
 int greenValue = 0;
@@ -23,11 +27,16 @@ void setup() {
   pinMode(ledRed, OUTPUT);
   pinMode(ledGreen, OUTPUT);
   pinMode(ledBlue, OUTPUT);
+  pinMode(button, INPUT);
 }
 
 void loop() {
   lcd.setCursor(0, 0);
   str = Serial.readString();
+  if (button == HIGH)
+  {
+    notification = 0;
+  }
   if (str != "")
   {
     length_of_msg = str.length();
@@ -39,12 +48,13 @@ void loop() {
     lcd.print(msg);
     lcd.setCursor(0, 1);
     lcd.print(name);
-    analogWrite(ledRed, 255); 
+    notification = 255;
   }
   Serial.write(Serial.available());
   analogWrite(ledGreen, 255);
-  delay(1000);
   analogWrite(ledRed, 0);
+  delay(1000);
+  analogWrite(ledRed, notification); 
   analogWrite(ledGreen, 0);
   analogWrite(ledBlue, 0);
   }
