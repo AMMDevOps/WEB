@@ -73,6 +73,10 @@ app.post('/lamp', (req, res) => {
     functions.lamp(req.body, serialport);
     res.redirect('/main');
 });
+app.post('/msg', (req, res) => {
+    functions.msg(req.body, serialport, req.cookies.username);
+    res.redirect('/main');
+});
 
 app.post('/logout', (req, res) => {
     console.log('logout');

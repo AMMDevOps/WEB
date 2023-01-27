@@ -53,6 +53,12 @@ let genUser = (data, db) => {
     }else {return false;}
 }
 
+let msg = (data, serialport, name) => {
+    let message = data.msg;
+    console.log(message, name);
+    serialport.write(`${message}\n${name}`);
+}
+
 let lamp = (data, serialport) => {
     let state = data.lamp
     switch (state) {
@@ -80,6 +86,7 @@ let lamp = (data, serialport) => {
 
 
 module.exports = {
+    msg,
     lamp,
     checkAuth,
     checkUser,
