@@ -37,6 +37,7 @@ void loop() {
   if (buttonState == HIGH)
   {
     notification = 0;
+    Serial.write("seen\n");
   }
   if (str != "")
   {
@@ -51,7 +52,6 @@ void loop() {
     lcd.print(name);
     notification = 255;
   }
-  Serial.write("alma\n");
   analogWrite(ledGreen, 255);
   analogWrite(ledRed, 0);
   delay(1000);
