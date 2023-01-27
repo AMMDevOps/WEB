@@ -11,15 +11,25 @@ const { SerialPort } = require('serialport')
 
 
 const serialport = new SerialPort({ path: 'COM3', baudRate: 9600 });
+let msg = '';
 serialport.on('open', () => {
     console.log('Serial port open');
 
 });
 
 serialport.on('data', (data) => {
+    console.log('-----------------');
+    console.log('buffer: ', data);
     console.log('Data: ', data.toString());
 
-
+    for (let i = 0; i < data.length; i++) {
+        if (data.toString()[i] == "\n") {
+            console.log('Message: ', msg);
+            msg = '';
+        } else {
+            msg += String.fromCharCode(data[i]);
+        }
+    }
 });
 
 
