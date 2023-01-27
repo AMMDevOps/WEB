@@ -31,9 +31,10 @@ void setup() {
 }
 
 void loop() {
+  int buttonState = digitalRead(button);
   lcd.setCursor(0, 0);
   str = Serial.readString();
-  if (button == HIGH)
+  if (buttonState == HIGH)
   {
     notification = 0;
   }
