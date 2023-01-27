@@ -18,10 +18,6 @@ serialport.on('open', () => {
 });
 
 serialport.on('data', (data) => {
-    console.log('-----------------');
-    console.log('buffer: ', data);
-    console.log('Data: ', data.toString());
-
     for (let i = 0; i < data.length; i++) {
         if (data.toString()[i] == "\n") {
             console.log('Message: ', msg);
