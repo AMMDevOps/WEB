@@ -11,7 +11,7 @@
    <% if(locals.name != (null || "")) { %>
       <h1>Hali <%= name %>!</h1>
    <% } %>
-   <h1></h1>
+   <h1><%= history %></h1>
    <form action="/msg" method="post">
       <input type="text" name="msg" placeholder="Enter message">
       <input type="submit" value="Submit">
