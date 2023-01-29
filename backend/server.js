@@ -75,10 +75,6 @@ app.get('/main', async(req, res) => {
     }
 });
 
-app.post('/lamp', (req, res) => {
-    functions.lamp(req.body, serialport);
-    res.redirect('/main');
-});
 app.post('/msg', (req, res) => {
     functions.msg(req.body, serialport, req.cookies.username);
     res.redirect('/main');
