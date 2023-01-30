@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
 const path = require('path');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
@@ -9,18 +8,6 @@ const cookieParser = require('cookie-parser')
 
 const functions = require('./modules/functions');
 
-
-const io = require('socket.io')(http);
-
-io.on('connection', (socket) => {
-    console.log('a user connected');
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-    });
-    socket.on('chat message', (msg) => {
-        io.emit('chat message', msg);
-    });
-});
 
 
 const { SerialPort } = require('serialport')
@@ -80,6 +67,7 @@ app.get('/js', (req, res) => {
 });
 
 app.get('/main', async(req, res) => {
+    console.log("alma: ", req);
     let data = await functions.checkAuth(req.cookies, client);
     if (data.status == true) {      
         res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
@@ -118,5 +106,4 @@ app.post('/register', (req, res) => {
 });
 
 
-
-http.listen(3000, () => {console.log('Server started on port 3000');});
+app.listen(3000, () => {console.log('Server started on port 3000');});
