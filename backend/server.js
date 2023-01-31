@@ -66,8 +66,17 @@ app.get('/js', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Scripts', 'main.js'));
 });
 
+app.get('lobby', async(req, res) => {
+    let data = await functions.checkAuth(req.cookies, client);
+    if (data.status == true) {
+        res.render(path.join(__dirname, 'views', 'lobby.ejs'), { name: req.cookies.username });
+    }
+    else {
+        res.redirect('/');
+    }
+});
+
 app.get('/main', async(req, res) => {
-    console.log("alma: ", req);
     let data = await functions.checkAuth(req.cookies, client);
     if (data.status == true) {      
         res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
@@ -90,11 +99,12 @@ app.post('/logout', (req, res) => {
 });
 
 app.post('/login', async(req, res) => {
+    let data = await functions.genUser(req.body, client);
     let ui = await functions.checkUser(req.body, client)
     if(ui.status == true){
         res.cookie('auth', ui.data.auth);
         res.cookie('username', req.body.username);
-        res.redirect(`/main`);
+        res.redirect(`/lobby`);
     } else {
         res.redirect('/');
     }

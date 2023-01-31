@@ -1,5 +1,5 @@
 CREATE DATABASE amm;
 \C amm
 CREATE TABLE users (id SERIAL PRIMARY KEY,username VARCHAR(50) NOT NULL,password VARCHAR(50) NOT NULL, email VARCHAR(50) NOT NULL, auth VARCHAR(300));
-CREATE TABLE room (id SERIAL PRIMARY KEY, useroneid INT, usertoid INT);
+CREATE TABLE room (id SERIAL PRIMARY KEY, useroneid INT, usertwoid INT);
 CREATE TABLE message (id SERIAL PRIMARY KEY, roomid INT, userid INT, message VARCHAR(300), time TIMESTAMP);

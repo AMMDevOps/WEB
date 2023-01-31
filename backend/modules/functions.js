@@ -43,7 +43,7 @@ let checkAuth = async (data, db) => {
 //Reg user
 let genUser = (data, db) => {
     let username = data.username;
-    let email = data.email;
+    let email = 'alma@gmail.com';
     let password1 = data.password1;
     let password2 = data.password2;
     if (password1 == password2) {
