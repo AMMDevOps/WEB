@@ -53,13 +53,24 @@ let genUser = (data, db) => {
     }else {return false;}
 }
 
-let msg = (data, serialport, name) => {
-    let message = data.msg;
-    console.log(message, name);
-    serialport.write(`${message}\n${name}`);
+
+
+function authToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
 }
 
+
 module.exports = {
+    authToken,
     msg,
     checkAuth,
     checkUser,
