@@ -1,3 +1,4 @@
+const { decodeBase64 } = require('bcryptjs');
 const { Client } = require('pg');
 const client = new Client({
     host: 'localhost',
@@ -8,3 +9,11 @@ const client = new Client({
 });
 client.connect();
 
+let pls = async (sql) => {
+    data = await client.query(sql);
+    return data;
+}
+
+module.exports = {
+    pls
+}

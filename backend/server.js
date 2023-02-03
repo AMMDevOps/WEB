@@ -26,24 +26,12 @@ app.get('/js', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Scripts', 'main.js'));
 });
 
-app.get('lobby', authToken, async(req, res) => {
-    let data = await functions.checkAuth(req.cookies, client);
-    if (data.status == true) {
-        res.render(path.join(__dirname, 'views', 'lobby.ejs'), { name: req.cookies.username });
-    }
-    else {
-        res.redirect('/');
-    }
+app.get('/lobby', functions.authToken, async(req, res) => {
+        res.render(path.join(__dirname, 'views', 'lobby.ejs'), { name: "alma" });
 });
 
-app.get('/main',authToken, async(req, res) => {
-    let data = await functions.checkAuth(req.cookies, client);
-    if (data.status == true) {      
-        res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
-    }
-    else {
-        res.redirect('/');
-    }
+app.get('/main', functions.authToken, async(req, res) => {     
+        res.render(path.join(__dirname, 'views', 'main.ejs'), { name: "alma" });
 });
 
 app.post('/msg', (req, res) => {
@@ -53,12 +41,8 @@ app.post('/msg', (req, res) => {
 
 app.post('/logout', (req, res) => {
     console.log('logout');
-    res.clearCookie('auth');
-    res.clearCookie('username');
     res.redirect('/');
 });
-
-
 
 app.post('/register', (req, res) => {
     functions.genUser(req.body, client);
