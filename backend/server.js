@@ -1,10 +1,12 @@
+require('dotenv').config(); // Load .env file
+
 const express = require('express');
 const app = express();
 const path = require('path');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
-
+const jwt = require('jsonwebtoken');
 
 const functions = require('./modules/functions');
 
@@ -45,6 +47,7 @@ client.connect();
 app.set('view engine', 'ejs');
 
 
+app.use(express.json())
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -66,7 +69,7 @@ app.get('/js', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Scripts', 'main.js'));
 });
 
-app.get('lobby', async(req, res) => {
+app.get('lobby', authToken, async(req, res) => {
     let data = await functions.checkAuth(req.cookies, client);
     if (data.status == true) {
         res.render(path.join(__dirname, 'views', 'lobby.ejs'), { name: req.cookies.username });
@@ -76,7 +79,7 @@ app.get('lobby', async(req, res) => {
     }
 });
 
-app.get('/main', async(req, res) => {
+app.get('/main',authToken, async(req, res) => {
     let data = await functions.checkAuth(req.cookies, client);
     if (data.status == true) {      
         res.render(path.join(__dirname, 'views', 'main.ejs'), { name: req.cookies.username });
@@ -98,22 +101,25 @@ app.post('/logout', (req, res) => {
     res.redirect('/');
 });
 
-app.post('/login', async(req, res) => {
-    let data = await functions.genUser(req.body, client);
-    let ui = await functions.checkUser(req.body, client)
-    if(ui.status == true){
-        res.cookie('auth', ui.data.auth);
-        res.cookie('username', req.body.username);
-        res.redirect(`/lobby`);
-    } else {
-        res.redirect('/');
-    }
-});
+
 
 app.post('/register', (req, res) => {
     functions.genUser(req.body, client);
     res.redirect('/'); 
 });
 
+
+function authToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+}
 
 app.listen(3000, () => {console.log('Server started on port 3000');});
