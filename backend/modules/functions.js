@@ -31,7 +31,9 @@ let genUser = (data) => {
 function authToken(req, res, next) {
     console.log(req.headers);
     const authHeader = req.headers['authorization'];
+    console.log(authHeader);
     const token = authHeader && authHeader.split(' ')[1];
+    console.log(token);
 
     if (token == null) return res.sendStatus(401);
 

@@ -1,4 +1,3 @@
-const { decodeBase64 } = require('bcryptjs');
 const { Client } = require('pg');
 const client = new Client({
     host: 'localhost',
