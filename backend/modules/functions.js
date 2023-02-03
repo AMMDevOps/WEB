@@ -14,11 +14,11 @@ let checkUser = async (data) => {
 
 
 //Reg user
-let genUser = (data, db) => {
+let genUser = (data) => {
     let username = data.username;
     let email = 'alma@gmail.com';
-    let password1 = data.password1;
-    let password2 = data.password2;
+    let password1 = data.password;
+    let password2 = data.password;
     if (password1 == password2) {
         let sql = `INSERT INTO users (username, password, email) VALUES ('${username}', '${password1}', '${email}')`;
         db.pls(sql, (err, res) => {if (err) {console.log(err);} else {console.log('User created');}});
