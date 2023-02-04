@@ -50,7 +50,6 @@ app.post('/login', async(req, res) => {
 
 //logout USER
 app.post('/logout', auth.check, (req, res) => {
-    console.log("alma");
     let sql = `UPDATE users SET auth = '' WHERE username = '${req.body.username}'`;
     db.pls(sql);
     res.redirect("/");
