@@ -43,10 +43,14 @@ app.post('/login', async(req, res) => {
         let authtoken = auth.loginUser(req.body);
         res.cookie('authtoken', authtoken,);
         res.cookie('username', req.body.username);
-        res.redirect(`/chat`);
+        res.redirect(`/lobby`);
     } else {
         res.redirect('/');
     }
+});
+
+app.post('/join', auth.check, (req, res) => {
+    res.redirect(`/chat/?id=${req.body.room}`);
 });
 
 //logout USER
@@ -67,12 +71,15 @@ app.get('/', (req, res) => {
 
 //lobby PAGE
 app.get('/lobby', auth.check, async(req, res) => {
-        res.render(path.join(__dirname, 'views', 'lobby.ejs'), { name: "alma" });
+    let user_rooms = await functions.getRooms(req.cookies.username);
+    res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms });
 });
 
 //chat PAGE
-app.get('/chat', auth.check, async(req, res) => {     
-        res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: "alma" });
+app.get('/chat', auth.check, async(req, res) => { 
+    let room_id = req.query;
+    console.log(room_id);
+    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: "alma" });
 });
 
 
