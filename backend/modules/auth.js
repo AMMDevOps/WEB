@@ -25,23 +25,19 @@ function loginUser(data) {
     return accestoken;
 }
 
-function findRef(name) {
+async function findRef(name) {
         console.log("findRefname: ", name);
-        let sql = `SELECT * FROM users WHERE username = '${name}'`;
-        db.pls(sql, async(err, resu) => {
-            if (err) {
-                console.log("alma");
-                return res.sendStatus(403);
-            }
-            let user = resu.rows;
-            let reftoken = user.auth;
-            console.log(resu.rows);
-            console.log("findRefreftoken: ", reftoken);
-            let data = await testRef(reftoken);
-            console.log("findRefdata: ", data);
-            return data;
+        let sql = `SELECT auth FROM users WHERE username = '${name}'`;
+        let resu = await db.pls(sql)
+        console.log(",,,,,tets,,,,,");
+        console.log(resu.rows[0].auth);
+        console.log(".....test.....")
+        let reftoken = resu.rows[0].auth;
+        console.log("findRefreftoken: ", reftoken);
+        let data = testRef(reftoken);
+        console.log("findRefdata: ", data);
+        return data;
             
-        });
 }
 
 function testRef(token) {
