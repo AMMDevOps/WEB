@@ -4,6 +4,9 @@ const db = require('./db');
 const jwt = require('jsonwebtoken');
 
 function genToken(user) {
+    console.log("----");
+    console.log(user);
+    console.log("-----")
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
 }
 
@@ -26,14 +29,9 @@ function loginUser(data) {
 }
 
 async function findRef(name) {
-        console.log("findRefname: ", name);
         let sql = `SELECT auth FROM users WHERE username = '${name}'`;
         let resu = await db.pls(sql)
-        console.log(",,,,,tets,,,,,");
-        console.log(resu.rows[0].auth);
-        console.log(".....test.....")
         let reftoken = resu.rows[0].auth;
-        console.log("findRefreftoken: ", reftoken);
         let data = testRef(reftoken);
         console.log("findRefdata: ", data);
         return data;
@@ -41,18 +39,19 @@ async function findRef(name) {
 }
 
 function testRef(token) {
+    console.log("token", token);
+    let data = {}
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        console.log(user.name);
         if (err) {
             console.log("testReferr: ", err);
             return res.sendStatus(403);
         }
-        let accestoken = genToken(user);
-        let reftoken = genRef(user);
-        let sql = `UPDATE users SET auth = '${reftoken}' WHERE username = '${user.name}'`;
-        db.pls(sql);
+        let accestoken = genToken({name: user.name});
         console.log("testRefdata: ", {authtoken: accestoken, user: user.name});
-        return {authtoken: accestoken, user: user.name};
-    })     
+        data = {authtoken: accestoken, user: user.name};
+    })
+    return data     
 }
 
 
