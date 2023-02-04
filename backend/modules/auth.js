@@ -25,48 +25,50 @@ function loginUser(data) {
     return accestoken;
 }
 
-function findRef(token) {
-    const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        console.log(payload);
-        let sql = `SELECT * FROM users WHERE username = '${payload.name}'`;
+function findRef(name) {
+        console.log("findRefname: ", name);
+        let sql = `SELECT * FROM users WHERE username = '${name}'`;
         db.pls(sql, (err, result) => {
             if (err) {
+                console.log("alma");
                 return res.sendStatus(403);
             }
-            if (result.rows.length > 0) {
-                let user = result.rows[0];
-                let reftoken = user.auth;
-                let data = testRef(reftoken);
-                return data;
-            }
+            let user = result.rows;
+            let reftoken = user.auth;
+            console.log("findRefreftoken: ", reftoken);
+            let data = testRef(reftoken);
+            console.log("findRefdata: ", data);
+            return data;
+            
         });
 }
 
 function testRef(token) {
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) {
+            console.log("testReferr: ", err);
             return res.sendStatus(403);
         }
         let accestoken = genToken(user);
         let reftoken = genRef(user);
         let sql = `UPDATE users SET auth = '${reftoken}' WHERE username = '${user.name}'`;
         db.pls(sql);
+        console.log("testRefdata: ", {authtoken: accestoken, user: user.name});
         return {authtoken: accestoken, user: user.name};
     })     
 }
 
 
-function check(req, res, next) {
+function check (req, res, next) {
     let token = req.cookies.authtoken;
 
     if (token == null) return res.sendStatus(401);
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        console.log(payload);
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {
-
-            let data = findRef(payload);
+            const payload = jwt.decode(token);
+            let data = await findRef(payload.name.replaceAll(' ',''));
+            console.log("new token: ", data);
             if (data == null) {
                 return res.sendStatus(403);
             }
