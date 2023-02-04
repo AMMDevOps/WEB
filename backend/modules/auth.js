@@ -42,7 +42,6 @@ function testRef(token) {
     console.log("token", token);
     let data = {}
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-        console.log(user.name);
         if (err) {
             console.log("testReferr: ", err);
             return res.sendStatus(403);
