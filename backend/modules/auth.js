@@ -27,7 +27,7 @@ async function validityCheck(user) {
     let sql = `SELECT auth FROM users WHERE username = '${user.name}'`;
     //data will be the id of the token thats in auth
     data = await db.pls(sql);
-    if (data[0].auth == user.valid) {
+    if (data.rows[0].auth == user.valid) {
         return true;
     } else {
         return false;
@@ -51,6 +51,9 @@ function loginUser(data) {
     //returning the token
     return accestoken;
 }
+
+
+
 
 // Check if the user is authorized
 function check (req, res, next) {
