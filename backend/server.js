@@ -3,7 +3,6 @@ require('dotenv').config(); // Load .env file
 const express = require('express');
 const app = express();
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
@@ -12,7 +11,7 @@ const cookieParser = require('cookie-parser')
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-const arduino = require('./modules/arduino');
+//const arduino = require('./modules/arduino');
 
 
 app.set('view engine', 'ejs');
@@ -53,7 +52,7 @@ app.post('/msg', auth.check, (req, res) => {
 
 //reg USER
 app.post('/register', (req, res) => {
-    functions.genUser(req.body, client);
+    functions.genUser(req.body);
     res.redirect('/'); 
 });
 
