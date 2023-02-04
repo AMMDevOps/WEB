@@ -7,12 +7,12 @@ const jwt = require('jsonwebtoken');
 
 // Generate token for user
 function genToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' });
 }
 
 // Generate refresh token for user
 function genRef(user) {
-    return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '20min' });
+    return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '10min' });
 }
 
 
@@ -64,6 +64,13 @@ function check (req, res, next) {
             next();
         }
         //if the token is valid, continue
+        
+        //generating a new token
+        let accestoken = genToken({name: req.cookies.username});
+        //setting the new token
+        res.cookie('authtoken', accestoken);
+
+        //setting the user and continuing
         req.user = user;
         next();
     });
@@ -98,6 +105,11 @@ function testRef(token) {
         //if the ref token is valid, generate a new authToken
         let accestoken = genToken({name: user.name});
         data = {authtoken: accestoken, user: user.name};
+
+        //generating a new ref token
+        let reftoken = genRef({name: user.name});
+        let sql = `UPDATE users SET auth = '${reftoken}' WHERE username = '${user.name}'`;
+        db.pls(sql)
     })
     //return the new authToken
     return data     

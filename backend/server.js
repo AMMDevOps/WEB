@@ -42,7 +42,8 @@ app.post('/login', async(req, res) => {
     if(await functions.checkUser(req.body)){
         let authtoken = auth.loginUser(req.body);
         res.cookie('authtoken', authtoken,);
-        res.redirect(`/main`);
+        res.cookie('username', req.body.username);
+        res.redirect(`/chat`);
     } else {
         res.redirect('/');
     }
@@ -71,7 +72,7 @@ app.get('/lobby', auth.check, async(req, res) => {
 
 //chat PAGE
 app.get('/chat', auth.check, async(req, res) => {     
-        res.render(path.join(__dirname, 'views', 'main.ejs'), { name: "alma" });
+        res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: "alma" });
 });
 
 
