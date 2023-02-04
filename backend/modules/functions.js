@@ -12,7 +12,6 @@ let checkUser = async (data) => {
     else {return false;}
 }
 
-
 //Reg user
 let genUser = (data) => {
     let username = data.username;
@@ -26,27 +25,7 @@ let genUser = (data) => {
     }else {return false;}
 }
 
-
-//checkAuth
-function authToken(req, res, next) {
-    console.log(req.headers);
-    const authHeader = req.headers['authorization'];
-    console.log(authHeader);
-    const token = authHeader && authHeader.split(' ')[1];
-    console.log(token);
-
-    if (token == null) return res.sendStatus(401);
-
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-}
-
-
 module.exports = {
-    authToken,
     checkUser,
     genUser
 };

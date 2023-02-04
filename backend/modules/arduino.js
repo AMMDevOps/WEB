@@ -17,7 +17,7 @@ serialport.on('data', (data) => {
     }
 });
 
-let send = (data, serialport, name) => {
+let send = (data, name) => {
     let message = data.msg;
     console.log(message, name);
     serialport.write(`${message}\n${name}`);
