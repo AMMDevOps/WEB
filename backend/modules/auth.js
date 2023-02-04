@@ -4,9 +4,6 @@ const db = require('./db');
 const jwt = require('jsonwebtoken');
 
 function genToken(user) {
-    console.log("----");
-    console.log(user);
-    console.log("-----")
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
 }
 
@@ -33,21 +30,17 @@ async function findRef(name) {
         let resu = await db.pls(sql)
         let reftoken = resu.rows[0].auth;
         let data = testRef(reftoken);
-        console.log("findRefdata: ", data);
         return data;
             
 }
 
 function testRef(token) {
-    console.log("token", token);
     let data = {}
     jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) {
-            console.log("testReferr: ", err);
             return res.sendStatus(403);
         }
         let accestoken = genToken({name: user.name});
-        console.log("testRefdata: ", {authtoken: accestoken, user: user.name});
         data = {authtoken: accestoken, user: user.name};
     })
     return data     
@@ -63,9 +56,7 @@ function check (req, res, next) {
         if (err) {
             const payload = jwt.decode(token);
             let uname = payload.name.replaceAll(' ','')
-            console.log(uname);
             let data = await findRef(uname);
-            console.log("new token: ", data);
             if (data == null) {return res.sendStatus(403);}
             res.cookie('authtoken', data.authtoken);
             req.user = data.user;
