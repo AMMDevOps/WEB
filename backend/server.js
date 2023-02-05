@@ -13,7 +13,7 @@ io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('connected', (data) => {
         let username = data.split(' ')[0];
-        let token = auth.checkSocket(data);
+        let token = auth.startSocketValidating(data, socket.id);
         if (token != false){
             functions.setSocket(username, socket.id);
             socket.emit('token', token);

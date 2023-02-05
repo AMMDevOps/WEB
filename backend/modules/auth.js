@@ -57,7 +57,7 @@ function loginUser(data) {
 }
 
 
-function checkSocket(data) {
+function startSocketValidating(data, sockid) {
     let list = data.split(' ');
     let token = list[2];
     console.log("token", token);
@@ -71,14 +71,10 @@ function checkSocket(data) {
         let stat = await validityCheck(user);
         console.log("stat", stat);
         if (stat){
-            newId(user);
-            console.log("........\nuservalid", user.valid);
-            let val = user.valid + 1;
-            console.log("val", val, "\n........"); 
-            //generating a new token
-            let accestoken = genToken({name: user.name, valid: user.valid + 1});
+            //generating a new Socket_token
+            let socket_token = genToken({name: user.name, socket: sockid, valid: 0});
             //setting the new token
-            return accestoken;
+            return socket_token;
         } else {
             return false;
         }
@@ -96,24 +92,24 @@ function check (req, res, next) {
     if (token == null) return res.sendStatus(401);
 
     //if there is a token, check if it is valid
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {
-            jwt.verify(s_token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            jwt.verify(s_token, process.env.ACCESS_TOKEN_SECRET, async(err, suser) => {
                 if (err) {
                     console.log(err);
                     return res.sendStatus(403);
                 }
                 //if the token is valid, continue
 
-                let stat = validityCheck(user);
+                let stat = await validityCheck(suser);
                 if (stat){
-                    newId(user);
+                    newId(suser);
                     //generating a new token
-                    let accestoken = genToken({name: user.name, valid: user.valid + 1});
+                    let accestoken = genToken({name: suser.name, valid: suser.valid + 1});
                     //setting the new token
                     res.cookie('authtoken', accestoken);
                     //setting the user and continuing
-                    req.user = user;
+                    req.user = suser;
                     next();
                 }
             console.log(err);
@@ -123,7 +119,7 @@ function check (req, res, next) {
         //if the token is valid, continue
         
         //checking if the token is in the order of validity
-        let stat = validityCheck(user);
+        let stat = await validityCheck(user);
         if (stat){
             newId(user);
             //generating a new token
@@ -138,7 +134,7 @@ function check (req, res, next) {
 }
 
 module.exports = {
-    checkSocket,
+    startSocketValidating,
     check,
     loginUser
 }
