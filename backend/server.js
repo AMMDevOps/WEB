@@ -73,8 +73,6 @@ app.post('/join', auth.check, (req, res) => {
     
 });
 
-let genRoom =
-
 //logout USER
 app.post('/logout', auth.check, (req, res) => {
     let sql = `UPDATE users SET auth = '' WHERE username = '${req.body.username}'`;

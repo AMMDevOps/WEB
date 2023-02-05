@@ -119,10 +119,12 @@ let genUser = (data) => {
     }else {return false;}
 }
 let genRoom = async(u1, u2)=>{
-    let sql =`INSERT INTO room (username, password, email) VALUES ('${username}', '${password1}', '${email}')`;
+    let sql =`INSERT INTO room (useroneid, usertwoid) VALUES (${u1}, ${u2})`;
+    db.pls(sql)
 }
 
 module.exports = {
+    genRoom,
     setSocket,
     sendMsg,
     getRoomMate,
