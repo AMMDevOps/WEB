@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-const arduino = require('./modules/arduino');
+//const arduino = require('./modules/arduino');
 
 
 app.set('view engine', 'ejs');
@@ -72,6 +72,8 @@ app.post('/join', auth.check, (req, res) => {
     res.redirect(`/chat/?id=${req.body.room}`);
     
 });
+
+let genRoom =
 
 //logout USER
 app.post('/logout', auth.check, (req, res) => {
@@ -120,5 +122,5 @@ app.post('/msgArduino', auth.check, (req, res) => {
 
 
 http.listen(3000, () => {
-    console.log('listening on 300');
+    console.log('listening on 3000');
 });

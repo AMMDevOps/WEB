@@ -118,6 +118,9 @@ let genUser = (data) => {
         return true;
     }else {return false;}
 }
+let genRoom = async(u1, u2)=>{
+    let sql =`INSERT INTO room (username, password, email) VALUES ('${username}', '${password1}', '${email}')`;
+}
 
 module.exports = {
     setSocket,
