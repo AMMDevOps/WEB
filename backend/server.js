@@ -58,6 +58,7 @@ app.post('/register', (req, res) => {
 //login USER
 app.post('/login', async(req, res) => {
     if(await functions.checkUser(req.body)){
+        console.log("----------------------");
         let authtoken = auth.loginUser(req.body);
         res.cookie('authtoken', authtoken,);
         res.cookie('username', req.body.username);

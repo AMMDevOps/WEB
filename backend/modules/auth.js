@@ -27,9 +27,13 @@ async function validityCheck(user) {
     let sql = `SELECT auth FROM users WHERE username = '${user.name}'`;
     //data will be the id of the token thats in auth
     data = await db.pls(sql);
+    console.log("auth", data.rows[0].auth);
+    console.log("activ", user.valid);
     if (data.rows[0].auth == user.valid) {
+        console.log("valid");
         return true;
     } else {
+        console.log("invalid");
         return false;
     }
     
@@ -57,6 +61,12 @@ function checkSocket(data) {
     let list = data.split(' ');
     let token = list[1];
 
+    let aut = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {console.log(err); return false;}
+        console.log("user:", user);
+    });
+
+
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {console.log(err); return false;}
         //if the token is valid, continue
@@ -66,6 +76,9 @@ function checkSocket(data) {
         let stat = validityCheck(user);
         if (stat){
             newId(user);
+            console.log("........\nuservalid", user.valid);
+            let val = user.valid + 1;
+            console.log("val", val, "\n........"); 
             //generating a new token
             let accestoken = genToken({name: user.name, valid: user.valid + 1});
             //setting the new token
@@ -92,6 +105,7 @@ function check (req, res, next) {
         if (err) {console.log(err); return res.sendStatus(403);}
         //if the token is valid, continue
         
+        console.log(user);
         //checking if the token is in the order of validity
         let stat = validityCheck(user);
         if (stat){
@@ -104,7 +118,6 @@ function check (req, res, next) {
             req.user = user;
             next();
         }
-        
     });
 }
 
