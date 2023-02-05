@@ -7,3 +7,7 @@ socket.on('connect', () => {
 socket.on('message', (msg) => {
     console.log(msg);
 });
+
+socket.on('msg', (msg) => {
+    console.log(msg);
+});

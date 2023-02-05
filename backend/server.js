@@ -2,10 +2,25 @@ require('dotenv').config(); // Load .env file
 
 const express = require('express');
 const app = express();
+const http = require('http').createServer(app);
 const path = require('path');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser')
+const io = require('socket.io')(http, {cors: {origin: '*',}});
+
+io.on('connection', (socket) => {
+    console.log('a user connected');
+    socket.on('connected', (userId) => {
+        console.log('log in: ' + userId);
+        console.log(socket.id);
+    });
+    socket.on('msg', (msg) => {
+        console.log('message: ' + msg);
+    });
+});
+
+
 
 
 const auth = require('./modules/auth');
@@ -100,4 +115,6 @@ app.post('/msgArduino', auth.check, (req, res) => {
 });
 
 
-app.listen(3000, () => {console.log('Server started on port 3000');});
+http.listen(3000, () => {
+    console.log('listening on 300');
+});
