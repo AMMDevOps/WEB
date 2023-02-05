@@ -1,5 +1,10 @@
 let db = require('./db');
 
+let setSocket = async (username, socket) => {
+    let sql = `UPDATE users SET socketid = '${socket}' WHERE username = '${username}'`;
+    db.pls(sql);
+}
+
 let sendMsg = async (data, username) => {
     let time = getDateNow();
     let room_id = parseInt(data.room);
@@ -115,7 +120,7 @@ let genUser = (data) => {
 }
 
 module.exports = {
-
+    setSocket,
     sendMsg,
     getRoomMate,
     getChat,

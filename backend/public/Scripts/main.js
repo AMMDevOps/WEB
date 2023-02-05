@@ -1,13 +1,16 @@
-const socket = io('http://192.168.1.199:8080');
+const socket = io('http://192.168.1.199:3000');
 
 socket.on('connect', () => {
-    console.log('connected');
-});
-
-socket.on('message', (msg) => {
-    console.log(msg);
-});
-
-socket.on('msg', (msg) => {
-    console.log(msg);
+    let list = document.cookie.split(';');
+    let txt = '';
+    list.forEach(element => {
+        if (element.includes('username')) {
+            txt += element.split('=')[1];
+            txt += ' ';
+        }
+        if (element.includes('authtoken')) {
+            txt += element.split('=')[1];
+        }
+    });
+    socket.emit('connected', txt);
 });

@@ -11,12 +11,15 @@ const io = require('socket.io')(http, {cors: {origin: '*',}});
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    socket.on('connected', (userId) => {
-        console.log('log in: ' + userId);
-        console.log(socket.id);
-    });
-    socket.on('msg', (msg) => {
-        console.log('message: ' + msg);
+    socket.on('connected', (data) => {
+        let username = data.split(' ')[0];
+        let token = auth.checkSocket(data);
+        if (token != false){
+            functions.setSocket(username, socket.id);
+            socket.emit('token', token);
+        } else {
+            socket.emit('token', 'false');
+        }
     });
 });
 

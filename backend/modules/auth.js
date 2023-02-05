@@ -53,7 +53,30 @@ function loginUser(data) {
 }
 
 
+function checkSocket(data) {
+    let list = data.split(' ');
+    let token = list[1];
 
+    let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {console.log(err); return false;}
+        //if the token is valid, continue
+        
+        //checking if the token is in the order of validity
+        console.log(user);
+        let stat = validityCheck(user);
+        if (stat){
+            newId(user);
+            //generating a new token
+            let accestoken = genToken({name: user.name, valid: user.valid + 1});
+            //setting the new token
+            return accestoken;
+        } else {
+            return false;
+        }
+    }
+    );
+    return auth;
+};
 
 // Check if the user is authorized
 function check (req, res, next) {
@@ -86,6 +109,7 @@ function check (req, res, next) {
 }
 
 module.exports = {
+    checkSocket,
     check,
     loginUser
 }
