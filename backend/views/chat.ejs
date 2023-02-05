@@ -4,17 +4,31 @@
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="./js"></script>
+   <script src="../Scripts/main.js"></script>
+   <link rel="stylesheet" href="../Styles/app.css">
    <title>Main Page</title>
 </head>
 <body>
-      <h1>Hali <%= name %>!</h1>
-   <form action="/msg" method="post">
-      <input type="text" name="msg" placeholder="Enter message">
-      <input type="submit" value="Submit">
-   </form>
-   <form action="/logout" method="post">
-      <button type="submit" value="log">Logout</button>
-   </form>
+   <div id="msg">
+      <h1>TO <%= name %>!</h1>
+      <div>
+         <ul id="messages">
+            <% for (let i = 0; i < messages.length; i++) { %>
+               <% let message = messages[i]; %>
+               <li class="<%= message.user == name ? 'user2' : 'user' %>">
+                  <%= message.message %>
+               </li>
+            <% } %>
+         </ul>
+      </div>
+      <form id="sendmsg"action="/msg" method="post">
+         <input type="hidden" name="room" value="<%= room %>">
+         <input type="text" name="msg" placeholder="Enter message">
+         <input type="submit" value="<">
+      </form>
+      <form id="logout_btn"action="/logout" method="post">
+         <input type="submit" value="Logout"></input>
+      </form>
+   </div>
 </body>
 </html>  

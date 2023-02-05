@@ -1,5 +1,64 @@
 let db = require('./db');
 
+let sendMsg = async (data, username) => {
+    let time = getDateNow();
+    let room_id = parseInt(data.room);
+    let user_id = await getUserId(username);
+    let sql = `INSERT INTO message (roomid, userid, message, time) VALUES (${room_id}, ${user_id}, '${data.msg}', '${time}')`;
+    db.pls(sql);
+}
+
+let getDateNow = () => {
+    let date_ob = new Date();
+    // current date
+    let day = ("0" + date_ob.getDate()).slice(-2);
+
+    // current month
+    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+    // current year
+    let year = date_ob.getFullYear();
+
+    // current hours
+    let hours = date_ob.getHours();
+
+    // current minutes
+    let minutes = date_ob.getMinutes();
+
+    // current seconds
+    let seconds = date_ob.getSeconds();
+
+    // formating date & time in YYYY-MM-DD HH:MM:SS format
+    date = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+    return date;
+}
+
+let getRoomMate = async (room_id, username) => {
+    let userid = await getUserId(username);
+    let sql = `SELECT * FROM room WHERE id = ${room_id}`;
+    let data = await db.pls(sql);
+    let room = data.rows[0];
+    let room_mate = '';
+    if (room.useroneid == userid) {
+        room_mate = await getUserName(room.usertwoid);
+    } else {
+        room_mate = await getUserName(room.useroneid);
+    }
+    return room_mate;
+}
+
+
+let getChat = async (room_id) => {
+    let sql = `SELECT * FROM message WHERE roomid = ${room_id}`;
+    let data = await db.pls(sql);
+    let messages = data.rows;
+    let messages_formated = [];
+    for(let i = 0; i < messages.length; i++){
+        let user = await getUserName(messages[i].userid);
+        messages_formated.push({id: messages[i].id, user: user, message: messages[i].message, time: messages[i].time});
+    }
+    return messages_formated;
+}
 
 let getRooms = async (username) => {
     let id = await getUserId(username);
@@ -56,6 +115,10 @@ let genUser = (data) => {
 }
 
 module.exports = {
+
+    sendMsg,
+    getRoomMate,
+    getChat,
     getRooms,
     checkUser,
     genUser

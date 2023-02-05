@@ -51,6 +51,7 @@ app.post('/login', async(req, res) => {
 
 app.post('/join', auth.check, (req, res) => {
     res.redirect(`/chat/?id=${req.body.room}`);
+    
 });
 
 //logout USER
@@ -58,6 +59,12 @@ app.post('/logout', auth.check, (req, res) => {
     let sql = `UPDATE users SET auth = '' WHERE username = '${req.body.username}'`;
     db.pls(sql);
     res.redirect("/");
+});
+
+//send MSG
+app.post('/msg', auth.check, (req, res) => {
+    functions.sendMsg(req.body, req.cookies.username);
+    res.redirect(`/chat/?id=${req.body.room}`);
 });
 
 
@@ -77,16 +84,17 @@ app.get('/lobby', auth.check, async(req, res) => {
 
 //chat PAGE
 app.get('/chat', auth.check, async(req, res) => { 
-    let room_id = req.query;
-    console.log(room_id);
-    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: "alma" });
+    let room_id = parseInt(req.query.id);
+    let chat = await functions.getChat(room_id);
+    let room_mate = await functions.getRoomMate(room_id, req.cookies.username);
+    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: room_mate, messages: chat, room: room_id,});
 });
 
 
 //messing with arduino ---------------------------------------------------------------
 
 //sending MSG 
-app.post('/msg', auth.check, (req, res) => {
+app.post('/msgArduino', auth.check, (req, res) => {
     arduino.send(req.body, req.cookies.username)
     res.redirect('/main');
 });
