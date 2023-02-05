@@ -60,12 +60,7 @@ function loginUser(data) {
 function checkSocket(data) {
     let list = data.split(' ');
     let token = list[1];
-
-    let aut = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {console.log(err); return false;}
-        console.log("user:", user);
-    });
-
+    console.log("token", token);
 
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) {console.log(err); return false;}
@@ -93,19 +88,39 @@ function checkSocket(data) {
 
 // Check if the user is authorized
 function check (req, res, next) {
-
     //getting the token from the cookies
     let token = req.cookies.authtoken;
-
+    let s_token = req.cookies.socketauthtoken;
     //if there is no token, return 401
     if (token == null) return res.sendStatus(401);
 
     //if there is a token, check if it is valid
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {console.log(err); return res.sendStatus(403);}
+        if (err) {
+            jwt.verify(s_token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+                if (err) {
+                    console.log(err);
+                    return res.sendStatus(403);
+                }
+                //if the token is valid, continue
+
+                let stat = validityCheck(user);
+                if (stat){
+                    newId(user);
+                    //generating a new token
+                    let accestoken = genToken({name: user.name, valid: user.valid + 1});
+                    //setting the new token
+                    res.cookie('authtoken', accestoken);
+                    //setting the user and continuing
+                    req.user = user;
+                    next();
+                }
+            console.log(err);
+            return res.sendStatus(403);
+            });
+        }
         //if the token is valid, continue
         
-        console.log(user);
         //checking if the token is in the order of validity
         let stat = validityCheck(user);
         if (stat){
@@ -117,7 +132,7 @@ function check (req, res, next) {
             //setting the user and continuing
             req.user = user;
             next();
-        }
+        } 
     });
 }
 

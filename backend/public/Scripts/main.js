@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.1.199:3000');
 
 socket.on('connect', () => {
     console.log(document.cookie.split(';'));
@@ -18,6 +18,6 @@ socket.on('connect', () => {
 
 socket.on('token', (data) => {
     if (data != 'false') {
-        document.cookie = ` authtoken=${data}`;
+        document.cookie = `socketauthtoken=${data}`;
     }
 });

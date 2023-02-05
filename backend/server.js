@@ -69,8 +69,8 @@ app.post('/login', async(req, res) => {
 });
 
 app.post('/join', auth.check, (req, res) => {
-    res.redirect(`/chat/?id=${req.body.room}`);
-    
+    console.log(req.cookies);
+    res.redirect(`/chat/?id=${req.body.room}`); 
 });
 
 //logout USER
