@@ -21,6 +21,9 @@ io.on('connection', (socket) => {
             socket.emit('token', 'false');
         }
     });
+    socket.on('msg', () => {
+        console.log('msg');
+    });
 });
 
 
@@ -29,7 +32,7 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-//const arduino = require('./modules/arduino');
+const arduino = require('./modules/arduino');
 
 
 app.set('view engine', 'ejs');
@@ -58,6 +61,9 @@ app.post('/register', (req, res) => {
 //login USER
 app.post('/login', async(req, res) => {
     if(await functions.checkUser(req.body)){
+        res.clearCookie("authtoken");
+        res.clearCookie("username");
+        res.clearCookie("socketauthtoken");
         console.log("----------------------");
         let authtoken = auth.loginUser(req.body);
         res.cookie('authtoken', authtoken,);
@@ -69,7 +75,6 @@ app.post('/login', async(req, res) => {
 });
 
 app.post('/join', auth.check, (req, res) => {
-    console.log(req.cookies);
     res.redirect(`/chat/?id=${req.body.room}`); 
 });
 

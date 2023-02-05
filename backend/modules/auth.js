@@ -59,16 +59,17 @@ function loginUser(data) {
 
 function checkSocket(data) {
     let list = data.split(' ');
-    let token = list[1];
+    let token = list[2];
     console.log("token", token);
 
-    let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {console.log(err); return false;}
         //if the token is valid, continue
         
         //checking if the token is in the order of validity
         console.log(user);
-        let stat = validityCheck(user);
+        let stat = await validityCheck(user);
+        console.log("stat", stat);
         if (stat){
             newId(user);
             console.log("........\nuservalid", user.valid);
