@@ -22,8 +22,8 @@ io.on('connection', (socket) => {
             socket.emit('token', 'false');
         }
     });
-    socket.on('msg', () => {
-        console.log('msg');
+    socket.on('message', (msg) => {
+        console.log("msg", msg);
     });
 });
 

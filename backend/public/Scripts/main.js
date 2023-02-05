@@ -24,9 +24,29 @@ socket.on('token', (data) => {
 });
 
 
+addEventListener('keydown', (e) => {
+    if (e.key == 'Enter') {
+        send();
+    }
+});
+
 let send = () => {
-    let msg = document.getElementById('msg').value;
+    let msg = document.getElementById('msg_inp').value;
+    document.getElementById('msg_inp').value = '';
     msg += ' ';
-    
+    let token = findStoken();
+    msg += token;
+    console.log(msg);
     socket.emit('message', msg);
+}
+
+let findStoken = () => {
+    let list = document.cookie.split(';');
+    let txt = '';
+    list.forEach(element => {
+        if (element.includes('sockettoken')) {
+            txt += element.split('=')[1];
+        }
+    });
+    return txt;
 }
