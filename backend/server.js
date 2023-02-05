@@ -11,11 +11,12 @@ const io = require('socket.io')(http, {cors: {origin: '*',}});
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    socket.on('connected', (data) => {
+    socket.on('connected', async(data) => {
         let username = data.split(' ')[0];
-        let token = auth.startSocketValidating(data, socket.id);
+        let token = await auth.startSocketValidating(data, socket.id);
         if (token != false){
             functions.setSocket(username, socket.id);
+            console.log("stoken", token);
             socket.emit('token', token);
         } else {
             socket.emit('token', 'false');
@@ -63,7 +64,7 @@ app.post('/login', async(req, res) => {
     if(await functions.checkUser(req.body)){
         res.clearCookie("authtoken");
         res.clearCookie("username");
-        res.clearCookie("socketauthtoken");
+        res.clearCookie("sockettoken");
         console.log("----------------------");
         let authtoken = auth.loginUser(req.body);
         res.cookie('authtoken', authtoken,);

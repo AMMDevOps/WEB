@@ -13,11 +13,12 @@ socket.on('connect', () => {
             txt += element.split('=')[1];
         }
     });
+    console.log(txt);
     socket.emit('connected', txt);
 });
 
 socket.on('token', (data) => {
     if (data != 'false') {
-        document.cookie = `socketauthtoken=${data}`;
+        document.cookie = `sockettoken=${data}`;
     }
 });

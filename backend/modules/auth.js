@@ -12,13 +12,14 @@ function genToken(user) {
 
 // Start validity of the token
 async function startValidity(user) {
-    let sql = `UPDATE users SET auth = '${user.valid}' WHERE username = '${user.name}'`;
+    let sql = `UPDATE users SET auth = ${user.valid} WHERE username = '${user.name}'`;
     db.pls(sql);
 }
 
 // Update the validity of the token
 async function newId(user) {
-    let sql = `UPDATE users SET auth = '${user.valid + 1}' WHERE username = '${user.name}'`;
+    let sql = `UPDATE users SET auth = 
+    ${user.valid + 1} WHERE username = '${user.name}'`;
     db.pls(sql);
 }
 
@@ -59,7 +60,7 @@ function loginUser(data) {
 
 function startSocketValidating(data, sockid) {
     let list = data.split(' ');
-    let token = list[2];
+    let token = list[1];
     console.log("token", token);
 
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {

@@ -1,7 +1,8 @@
 let db = require('./db');
 
 let setSocket = async (username, socket) => {
-    console.log(socket);
+    console.log("username", username);
+    console.log("key", socket);
     let sql = `UPDATE users SET socketid = '${socket}' WHERE username = '${username}'`;
     db.pls(sql);
 }
