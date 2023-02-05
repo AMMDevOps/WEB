@@ -22,11 +22,11 @@
             <% } %>
          </ul>
       </div>
-      <form id="sendmsg"action="/msg" method="post">
-         <input type="hidden" name="room" value="<%= room %>">
+      <div id="sendmsg">
          <input type="text" name="msg" placeholder="Enter message">
-         <input type="submit" value="<">
-      </form>
+         <input type="hidden" name="room" value="<%= room %>">
+         <input type="submit" value="<" onclick="send()">
+      </div>
       <form id="logout_btn"action="/logout" method="post">
          <input type="submit" value="Logout"></input>
       </form>

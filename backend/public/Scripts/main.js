@@ -22,3 +22,11 @@ socket.on('token', (data) => {
         document.cookie = `sockettoken=${data}`;
     }
 });
+
+
+let send = () => {
+    let msg = document.getElementById('msg').value;
+    msg += ' ';
+    
+    socket.emit('message', msg);
+}

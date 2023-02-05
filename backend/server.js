@@ -81,7 +81,7 @@ app.post('/join', auth.check, (req, res) => {
 
 //logout USER
 app.post('/logout', auth.check, (req, res) => {
-    let sql = `UPDATE users SET auth = '' WHERE username = '${req.body.username}'`;
+    let sql = `UPDATE users SET auth = 0 WHERE username = '${req.body.username}'`;
     db.pls(sql);
     res.redirect("/");
 });
