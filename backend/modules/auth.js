@@ -18,8 +18,12 @@ async function startValidity(user) {
 
 // Update the validity of the token
 async function newId(user) {
-    let sql = `UPDATE users SET auth = 
-    ${user.valid + 1} WHERE username = '${user.name}'`;
+    let sql = `UPDATE users SET auth = ${user.valid + 1} WHERE username = '${user.name}'`;
+    db.pls(sql);
+}
+
+async function newSocketSave(user) {
+    let sql = `UPDATE users SET socketid = '${user.socket}' WHERE username = '${user.name}'`;
     db.pls(sql);
 }
 
@@ -41,12 +45,12 @@ async function validityCheck(user) {
 }
 
 async function validStoken(user) {
-    console.log("user2", user);
-    let sql = `SELECT socketid FROM users WHERE username = '${user.name}'`;
-    let data = db.pls(sql);
+    console.log("user2", user.name);
+    let sql = `SELECT * FROM users WHERE username = '${user.name}'`;
+    let data = await db.pls(sql);
 
-    console.log("datau", data.rows);
-    if (data.rows == user.socket){
+    console.log("datau", data.rows[0].socketid);
+    if (data.rows[0].socketid == user.socket){
         return true;
     }
     else{
@@ -81,8 +85,11 @@ async function checkStoken(data) {
         let stat = await validStoken(user)
 
         if (stat){
+            console.log("valid", user.socket);
             //generating a new Socket_token
-            let socket_token = genToken({name: user.name, socket: sockid});
+            let socket_token = genToken({name: user.name, socket: user.socket});
+            
+            newSocketSave(user);
             //setting the new token
             return socket_token;
         } else {

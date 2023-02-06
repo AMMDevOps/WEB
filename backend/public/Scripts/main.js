@@ -1,5 +1,7 @@
 const socket = io('http://localhost:3000');
 
+let active = '';
+
 socket.on('connect', () => {
     console.log(document.cookie.split(';'));
     let list = document.cookie.split(';');
@@ -18,8 +20,11 @@ socket.on('connect', () => {
 });
 
 socket.on('token', (data) => {
+    console.log("token", JSON.parse(data));
+    console.log("alma", data);
     if (data != 'false') {
-        document.cookie = `sockettoken=${data}`;
+        active = data.token;
+        console.log(active);
     }
 });
 
@@ -47,19 +52,8 @@ let send = () => {
     msg += ';';
     msg += username;
     msg += ' ';
-    let token = findStoken();
-    msg += token;
+    console.log(active);
+    msg += active;
     console.log(msg);
     socket.emit('message', msg);
-}
-
-let findStoken = () => {
-    let list = document.cookie.split(';');
-    let txt = '';
-    list.forEach(element => {
-        if (element.includes('sockettoken')) {
-            txt += element.split('=')[1];
-        }
-    });
-    return txt;
 }

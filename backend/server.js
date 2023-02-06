@@ -14,10 +14,12 @@ io.on('connection', (socket) => {
     socket.on('connected', async(data) => {
         let username = data.split(' ')[0];
         let token = await auth.startSocketValidating(data, socket.id);
+        console.log("token2", token);
         if (token != false){
             functions.setSocket(username, socket.id);
-            console.log("stoken", token);
-            socket.emit('token', token);
+            console.log("stoken10", token);
+            let obj = JSON.stringify({token: token});
+            socket.emit('token', obj);
         } else {
             socket.emit('token', 'false');
         }
