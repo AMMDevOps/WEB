@@ -7,9 +7,12 @@ socket.on('message', (msg) => {
     console.log(message);
 });
 
-socket.on('msg', (mess) => {
-    console.log(mess);
+socket.on('checkback', (mess) => {
+    let message = mess.split(';')[0];
+    createMSg(message);
 });
+
+
 
 socket.on('connect', () => {
     let list = document.cookie.split(';');
@@ -40,6 +43,13 @@ addEventListener('keydown', (e) => {
         send();
     }
 });
+
+let createMSg = (msg) => {
+    let msg_li = document.createElement('li');
+    msg_li.classList.add('user');
+    msg_li.innerHTML = msg;
+    document.getElementById('messages').appendChild(msg_li);
+}
 
 let send = () => {
     let cookie = document.cookie.split(';');

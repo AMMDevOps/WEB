@@ -27,6 +27,7 @@ io.on('connection', (socket) => {
         if (token != false){
             socket.emit('token', token)
             functions.formatToMSG(msg);
+            socket.emit('checkback', msg);
         }
     });
 });
