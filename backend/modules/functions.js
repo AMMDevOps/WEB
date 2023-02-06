@@ -8,7 +8,11 @@ let setSocket = async (username, socket) => {
 }
 
 let formatToMSG = (data)=>{
-    let msg 
+    let format = data.split(' ')[0];
+    let msg = format.split(';')[0];
+    let room = format.split(';')[1];
+    let user = format.split(';')[2];
+    sendMsg({msg: msg, room: room}, user);
     //working
     
 }
@@ -131,7 +135,8 @@ let genRoom = async(u1, u2)=>{
     db.pls(sql)
 }
 
-module.exports = {
+module.exports = {  
+    formatToMSG,
     genRoom,
     setSocket,
     sendMsg,

@@ -24,7 +24,7 @@
       </div>
       <div id="sendmsg">
          <input id="msg_inp" type="text" name="msg" placeholder="Enter message">
-         <input type="hidden" name="room" value="<%= room %>">
+         <input id="room" type="hidden" name="room" value="<%= room %>">
          <input type="submit" value="<" onclick="send()">
       </div>
       <form id="logout_btn"action="/logout" method="post">

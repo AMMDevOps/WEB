@@ -41,10 +41,12 @@ async function validityCheck(user) {
 }
 
 async function validStoken(user) {
+    console.log("user2", user);
     let sql = `SELECT socketid FROM users WHERE username = '${user.name}'`;
     let data = db.pls(sql);
 
-    if (data.rows[0] == user.socket){
+    console.log("datau", data.rows);
+    if (data.rows == user.socket){
         return true;
     }
     else{
@@ -70,7 +72,7 @@ function loginUser(data) {
 }
 
 async function checkStoken(data) {
-    let msg = data.split(' ')[0];
+    console.log("data", data);
     let token = data.split(' ')[1];
 
     let newtoken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {

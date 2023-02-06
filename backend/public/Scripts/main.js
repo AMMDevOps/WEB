@@ -31,8 +31,21 @@ addEventListener('keydown', (e) => {
 });
 
 let send = () => {
+    let cookie = document.cookie.split(';');
+    let username = '';
+    cookie.forEach(c => {
+        if (c.includes('username')) {
+            username = c.split('=')[1];
+        }
+    });
     let msg = document.getElementById('msg_inp').value;
     document.getElementById('msg_inp').value = '';
+    let room = document.getElementById('room').value;
+    document.getElementById('room').value = '';
+    msg += ';';
+    msg += room;
+    msg += ';';
+    msg += username;
     msg += ' ';
     let token = findStoken();
     msg += token;

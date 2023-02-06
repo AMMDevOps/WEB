@@ -24,11 +24,11 @@ io.on('connection', (socket) => {
     });
     socket.on('message', (msg) => {
         console.log("msg", msg);
-        let token = auth.checkStoken()
+        let token = auth.checkStoken(msg)
 
         if (token != false){
             socket.emit('token', token)
-            functions.send
+            functions.formatToMSG(msg);
         }
     });
 });
