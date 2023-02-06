@@ -40,6 +40,18 @@ async function validityCheck(user) {
     
 }
 
+async function validStoken(user) {
+    let sql = `SELECT socketid FROM users WHERE username = '${user.name}'`;
+    let data = db.pls(sql);
+
+    if (data.rows[0] == user.socket){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 // Login user and assign token for them
 function loginUser(data) {
     //username = from the form data
@@ -57,6 +69,28 @@ function loginUser(data) {
     return accestoken;
 }
 
+async function checkStoken(data) {
+    let msg = data.split(' ')[0];
+    let token = data.split(' ')[1];
+
+    let newtoken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
+        if (err){console.log(err);return false;}
+
+        let stat = await validStoken(user)
+
+        if (stat){
+            //generating a new Socket_token
+            let socket_token = genToken({name: user.name, socket: sockid});
+            //setting the new token
+            return socket_token;
+        } else {
+            return false;
+        }
+    })
+    return newtoken;
+}
+
+
 
 function startSocketValidating(data, sockid) {
     let list = data.split(' ');
@@ -73,7 +107,7 @@ function startSocketValidating(data, sockid) {
         console.log("stat", stat);
         if (stat){
             //generating a new Socket_token
-            let socket_token = genToken({name: user.name, socket: sockid, valid: 0});
+            let socket_token = genToken({name: user.name, socket: sockid});
             //setting the new token
             return socket_token;
         } else {
@@ -135,6 +169,7 @@ function check (req, res, next) {
 }
 
 module.exports = {
+    checkStoken,
     startSocketValidating,
     check,
     loginUser

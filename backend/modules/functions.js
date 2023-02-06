@@ -7,6 +7,12 @@ let setSocket = async (username, socket) => {
     db.pls(sql);
 }
 
+let formatToMSG = (data)=>{
+    let msg 
+    //working
+    
+}
+
 let sendMsg = async (data, username) => {
     let time = getDateNow();
     let room_id = parseInt(data.room);

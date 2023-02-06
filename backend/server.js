@@ -24,6 +24,12 @@ io.on('connection', (socket) => {
     });
     socket.on('message', (msg) => {
         console.log("msg", msg);
+        let token = auth.checkStoken()
+
+        if (token != false){
+            socket.emit('token', token)
+            functions.send
+        }
     });
 });
 
@@ -33,7 +39,7 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-const arduino = require('./modules/arduino');
+//const arduino = require('./modules/arduino');
 
 
 app.set('view engine', 'ejs');
