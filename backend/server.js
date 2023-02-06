@@ -22,8 +22,7 @@ io.on('connection', (socket) => {
         }
     });
     socket.on('message', async(msg) => {
-        let token = await auth.checkStoken(msg)
-        console.log("token", token);
+        let token = await auth.checkStoken(msg);
 
         if (token != false){
             socket.emit('token', token)

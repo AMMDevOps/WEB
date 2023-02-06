@@ -19,7 +19,6 @@ let sendMsg = async (data, username) => {
     let time = getDateNow();
     let room_id = parseInt(data.room);
     let user_id = await getUserId(username);
-    console.log(room_id, user_id, data.msg, time);
     let sql = `INSERT INTO message (roomid, userid, message, time) VALUES (${room_id}, ${user_id}, '${data.msg}', '${time}')`;
     db.pls(sql);
 }
