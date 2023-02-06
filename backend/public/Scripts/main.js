@@ -7,6 +7,10 @@ socket.on('message', (msg) => {
     console.log(message);
 });
 
+socket.on('msg', (mess) => {
+    console.log(mess);
+});
+
 socket.on('connect', () => {
     let list = document.cookie.split(';');
     let txt = '';
@@ -48,16 +52,12 @@ let send = () => {
     let msg = document.getElementById('msg_inp').value;
     document.getElementById('msg_inp').value = '';
     let room = document.getElementById('room').value;
-    document.getElementById('room').value = '';
     msg += ';';
     msg += room;
     msg += ';';
     msg += username;
     msg += ' ';
     msg += active;
+    console.log('sending', msg);
     socket.emit('message', msg);
 }
-
-setInterval(() => {
-    console.log('sending', active);
-}, 300);

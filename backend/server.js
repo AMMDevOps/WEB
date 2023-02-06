@@ -22,14 +22,12 @@ io.on('connection', (socket) => {
         }
     });
     socket.on('message', async(msg) => {
-        console.log("msg", msg);
         let token = await auth.checkStoken(msg)
         console.log("token", token);
 
         if (token != false){
             socket.emit('token', token)
             functions.formatToMSG(msg);
-            console.log("msg", msg);
         }
     });
 });
