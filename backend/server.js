@@ -14,23 +14,22 @@ io.on('connection', (socket) => {
     socket.on('connected', async(data) => {
         let username = data.split(' ')[0];
         let token = await auth.startSocketValidating(data, socket.id);
-        console.log("token2", token);
         if (token != false){
             functions.setSocket(username, socket.id);
-            console.log("stoken10", token);
-            let obj = JSON.stringify({token: token});
-            socket.emit('token', obj);
+            socket.emit('token', token);
         } else {
             socket.emit('token', 'false');
         }
     });
-    socket.on('message', (msg) => {
+    socket.on('message', async(msg) => {
         console.log("msg", msg);
-        let token = auth.checkStoken(msg)
+        let token = await auth.checkStoken(msg)
+        console.log("token", token);
 
         if (token != false){
             socket.emit('token', token)
             functions.formatToMSG(msg);
+            console.log("msg", msg);
         }
     });
 });

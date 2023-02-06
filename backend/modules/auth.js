@@ -32,24 +32,18 @@ async function validityCheck(user) {
     let sql = `SELECT auth FROM users WHERE username = '${user.name}'`;
     //data will be the id of the token thats in auth
     data = await db.pls(sql);
-    console.log("auth", data.rows[0].auth);
-    console.log("activ", user.valid);
     if (data.rows[0].auth == user.valid) {
-        console.log("valid");
         return true;
     } else {
-        console.log("invalid");
         return false;
     }
     
 }
 
 async function validStoken(user) {
-    console.log("user2", user.name);
     let sql = `SELECT * FROM users WHERE username = '${user.name}'`;
     let data = await db.pls(sql);
 
-    console.log("datau", data.rows[0].socketid);
     if (data.rows[0].socketid == user.socket){
         return true;
     }
@@ -76,7 +70,6 @@ function loginUser(data) {
 }
 
 async function checkStoken(data) {
-    console.log("data", data);
     let token = data.split(' ')[1];
 
     let newtoken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
@@ -85,7 +78,6 @@ async function checkStoken(data) {
         let stat = await validStoken(user)
 
         if (stat){
-            console.log("valid", user.socket);
             //generating a new Socket_token
             let socket_token = genToken({name: user.name, socket: user.socket});
             
@@ -104,7 +96,6 @@ async function checkStoken(data) {
 function startSocketValidating(data, sockid) {
     let list = data.split(' ');
     let token = list[1];
-    console.log("token", token);
 
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {console.log(err); return false;}
@@ -113,7 +104,6 @@ function startSocketValidating(data, sockid) {
         //checking if the token is in the order of validity
         console.log(user);
         let stat = await validityCheck(user);
-        console.log("stat", stat);
         if (stat){
             //generating a new Socket_token
             let socket_token = genToken({name: user.name, socket: sockid});

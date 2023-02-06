@@ -2,8 +2,12 @@ const socket = io('http://localhost:3000');
 
 let active = '';
 
+socket.on('message', (msg) => {
+    let message = msg.split(';');
+    console.log(message);
+});
+
 socket.on('connect', () => {
-    console.log(document.cookie.split(';'));
     let list = document.cookie.split(';');
     let txt = '';
     list.forEach(element => {
@@ -15,16 +19,14 @@ socket.on('connect', () => {
             txt += element.split('=')[1];
         }
     });
-    console.log(txt);
     socket.emit('connected', txt);
 });
 
 socket.on('token', (data) => {
-    console.log("token", JSON.parse(data));
-    console.log("alma", data);
+    console.log(data);
+
     if (data != 'false') {
-        active = data.token;
-        console.log(active);
+        active = data;
     }
 });
 
@@ -52,8 +54,10 @@ let send = () => {
     msg += ';';
     msg += username;
     msg += ' ';
-    console.log(active);
     msg += active;
-    console.log(msg);
     socket.emit('message', msg);
 }
+
+setInterval(() => {
+    console.log('sending', active);
+}, 300);
