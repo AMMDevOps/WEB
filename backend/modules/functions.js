@@ -18,7 +18,7 @@ let getSecSocketID = async (data) => {
     if (result.rows[0].useroneid == userid) {
         socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
     } else {
-        socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
+        socket = await getUserSocket(parseInt(result.rows[0].useroneid));
     }
     console.log(socket);
     return socket;
