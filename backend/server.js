@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
         if (token != false){
             socket.emit('token', token)
             functions.formatToMSG(msg);
-            io.to(senderid).emit('checkback2', msg);
+            io.to(senderid).emit('newMsgCb', msg);
             socket.emit('checkback', msg);
         }
     });
