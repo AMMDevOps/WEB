@@ -115,6 +115,7 @@ app.get('/', (req, res) => {
 
 //lobby PAGE
 app.get('/lobby', auth.check, async(req, res) => {
+    console.log(req.cookies.username);
     let user_rooms = await functions.getRooms(req.cookies.username);
     res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms });
 });

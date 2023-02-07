@@ -1,6 +1,7 @@
 const socket = io('http://192.168.1.199:3000');
 
 let active = '';
+let socketOk = true;
 
 socket.on('message', (msg) => {
     let message = msg.split(';');
@@ -10,6 +11,7 @@ socket.on('message', (msg) => {
 socket.on('checkback', (mess) => {
     let message = mess.split(';')[0];
     createMSg(message);
+    socketOk = true;
 });
 
 socket.on('newMsgCb', (msg) => {
@@ -64,6 +66,10 @@ let createMSg = (msg) => {
 }
 
 let send = () => {
+    if (socketOk == false) {
+        return;
+    }
+    socketOk = false;
     let cookie = document.cookie.split(';');
     let username = '';
     cookie.forEach(c => {

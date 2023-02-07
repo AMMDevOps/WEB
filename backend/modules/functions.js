@@ -100,6 +100,7 @@ let getChat = async (room_id) => {
 }
 
 let getRooms = async (username) => {
+    console.log(username);
     let id = await getUserId(username);
     let sql = `SELECT * FROM room WHERE useroneid  = ${id} OR usertwoid = ${id}`;
     let data = await db.pls(sql);
@@ -124,8 +125,10 @@ let getUserName = async (id) => {
 }
 
 let getUserId = async (username) => {
+    console.log("alma", username);
     let sql = `SELECT id FROM users WHERE username = '${username}'`;
     let result = await db.pls(sql);
+    console.log(result.rows);
     return result.rows[0].id;
 }
 
