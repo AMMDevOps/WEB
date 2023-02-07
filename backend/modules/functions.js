@@ -1,7 +1,7 @@
 let db = require('./db');
 
 let getUserSocket = async (userid) => {
-    let sql = `SELECT * FROM users WHERE userid = ${userid}`;
+    let sql = `SELECT * FROM users WHERE id = ${userid}`;
     let result = await db.pls(sql);
     return result.rows[0].socketid;
 }
@@ -12,7 +12,7 @@ let getSecSocketID = async (data) => {
 
     let userid = await getUserId(user);
 
-    let sql = `SELECT * FROM room WHERE roomid = ${room}`;
+    let sql = `SELECT * FROM room WHERE id = ${room}`;
     let result = await db.pls(sql);
     let socket = '';
     if (result.rows[0].useroneid == userid) {
@@ -20,6 +20,7 @@ let getSecSocketID = async (data) => {
     } else {
         socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
     }
+    console.log(socket);
     return socket;
 }
 

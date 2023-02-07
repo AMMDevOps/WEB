@@ -26,10 +26,12 @@ io.on('connection', (socket) => {
         let token = await auth.checkStoken(msg);
 
         let senderid = await functions.getSecSocketID(msg.split(' ')[0]);
+        log(senderid);
 
         if (token != false){
             socket.emit('token', token)
             functions.formatToMSG(msg);
+            io.to(senderid).emit('checkback2', msg);
             socket.emit('checkback', msg);
         }
     });
@@ -42,6 +44,7 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
+const { log } = require('console');
 //const arduino = require('./modules/arduino');
 
 

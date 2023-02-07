@@ -29,11 +29,15 @@ async function newSocketSave(user) {
 
 // Check if the token is valid
 async function validityCheck(user) {
+    if (user != null) {
     let sql = `SELECT auth FROM users WHERE username = '${user.name}'`;
     //data will be the id of the token thats in auth
     data = await db.pls(sql);
     if (data.rows[0].auth == user.valid) {
         return true;
+    } else {
+        return false;
+    }
     } else {
         return false;
     }
