@@ -1,5 +1,27 @@
 let db = require('./db');
 
+let getUserSocket = async (userid) => {
+    let sql = `SELECT * FROM users WHERE userid = ${userid}`;
+    let result = await db.pls(sql);
+    return result.rows[0].socketid;
+}
+
+let getSecSocketID = async (data) => {
+    let room = data.split(';')[1];
+    let user = data.split(';')[2];
+
+    let userid = await getUserId(user);
+
+    let sql = `SELECT * FROM room WHERE roomid = ${room}`;
+    let result = await db.pls(sql);
+    let socket = '';
+    if (result.rows[0].useroneid == userid) {
+        socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
+    } else {
+        socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
+    return socket;
+}
+
 let setSocket = async (username, socket) => {
     let sql = `UPDATE users SET socketid = '${socket}' WHERE username = '${username}'`;
     db.pls(sql);
@@ -133,7 +155,8 @@ let genRoom = async(u1, u2)=>{
     db.pls(sql)
 }
 
-module.exports = {  
+module.exports = {
+    getSecSocketID,  
     formatToMSG,
     genRoom,
     setSocket,

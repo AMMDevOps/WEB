@@ -21,8 +21,11 @@ io.on('connection', (socket) => {
             socket.emit('token', 'false');
         }
     });
+
     socket.on('message', async(msg) => {
         let token = await auth.checkStoken(msg);
+
+        let senderid = await functions.getSecSocketID(msg.split(' ')[0]);
 
         if (token != false){
             socket.emit('token', token)
@@ -30,6 +33,7 @@ io.on('connection', (socket) => {
             socket.emit('checkback', msg);
         }
     });
+
 });
 
 

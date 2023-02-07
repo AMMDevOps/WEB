@@ -20,7 +20,8 @@ body{
     align-items: center;
 }
 #msg{
-    width: 30vw;
+    font-size: larger;
+    width: 18vw;
     color: bisque;
     background-color: #333;
     padding: 10px;
@@ -52,7 +53,6 @@ body{
 }
 
 #sendmsg input[type="text"]{
-    margin-left: 3vw;
     width: 80%;
     padding: 5px;
     border: none;

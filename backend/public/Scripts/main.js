@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.1.199:3000');
 
 let active = '';
 
@@ -10,6 +10,11 @@ socket.on('message', (msg) => {
 socket.on('checkback', (mess) => {
     let message = mess.split(';')[0];
     createMSg(message);
+});
+
+socket.on('newMsgCb', (msg) => {
+    let message = msg.split(';')[0];
+    createMSg2(message);
 });
 
 
@@ -43,6 +48,13 @@ addEventListener('keydown', (e) => {
         send();
     }
 });
+
+let createMSg2 = (msg) => {
+    let msg_li = document.createElement('li');
+    msg_li.classList.add('user2');
+    msg_li.innerHTML = msg;
+    document.getElementById('messages').appendChild(msg_li);
+}
 
 let createMSg = (msg) => {
     let msg_li = document.createElement('li');
