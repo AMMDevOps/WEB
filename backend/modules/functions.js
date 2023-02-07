@@ -19,6 +19,7 @@ let getSecSocketID = async (data) => {
         socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
     } else {
         socket = await getUserSocket(parseInt(result.rows[0].usertwoid));
+    }
     return socket;
 }
 
@@ -156,7 +157,7 @@ let genRoom = async(u1, u2)=>{
 }
 
 module.exports = {
-    getSecSocketID,  
+    getSecSocketID,
     formatToMSG,
     genRoom,
     setSocket,
