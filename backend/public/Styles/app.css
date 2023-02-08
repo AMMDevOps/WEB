@@ -20,6 +20,8 @@ body{
     align-items: center;
 }
 #msg{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
     font-size: larger;
     width: 70vw;
     color: bisque;
