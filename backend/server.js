@@ -22,7 +22,14 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket
+    socket.on('page', async(data) => {
+        let token = await auth.checkStoken(data);
+        if (token != false){
+        let prev_page = await functions.getChatPage(data);
+        formated_page = JSON.stringify(prev_page);
+        socket.emit('history', formated_page);
+        }
+    });
 
     socket.on('message', async(msg) => {
         let token = await auth.checkStoken(msg);
@@ -46,6 +53,8 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
+const { get } = require('http');
+const { format } = require('path');
 //const arduino = require('./modules/arduino');
 
 

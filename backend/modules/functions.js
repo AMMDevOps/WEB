@@ -1,5 +1,13 @@
 let db = require('./db');
 
+let getChatPage = async (data) => {
+    let inf = data.split(' ')[0];
+    let page = inf.split(';')[0];
+    let room_id = inf.split(';')[1];
+    let username = inf.split(';')[2];
+
+}
+
 let getUserSocket = async (userid) => {
     let sql = `SELECT * FROM users WHERE id = ${userid}`;
     let result = await db.pls(sql);
@@ -175,6 +183,7 @@ let genRoom = async(u1, u2)=>{
 }
 
 module.exports = {
+    getChatPage,
     getSecSocketID,
     formatToMSG,
     genRoom,

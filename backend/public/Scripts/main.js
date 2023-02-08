@@ -91,9 +91,25 @@ let send = () => {
 }
 
 let pageUp = () => {
+    if (socketOk == false) {
+        return;
+    }
+    socketOk = false;
+    let cookie = document.cookie.split(';');
+    let username = '';
+    cookie.forEach(c => {
+        if (c.includes('username')) {
+            username = c.split('=')[1];
+        }
+    });
+    let room = document.getElementById('room').value;
     let page = document.getElementById('page').innerHTML;
-    page = parseInt(page);
-    page++;
+    page += ';';
+    page += room;
+    page += ';';
+    page += username;
+    page += ' ';
+    page += active;
     document.getElementById('page').innerHTML = page;
 
     socket.emit('page', page);
