@@ -38,7 +38,7 @@ socket.on('connect', () => {
 
 socket.on('history', (data) => {
     let list = JSON.parse(data);
-    console.log(list.list);
+    genHistory(list.list)
     socketOk = true;
 });
 
@@ -56,6 +56,27 @@ addEventListener('keydown', (e) => {
         send();
     }
 });
+
+let genHistory = (data) => {
+    let cookies = document.cookie.split(';');
+    let username = '';
+    cookies.forEach(c => {
+        if (c.includes('username')) {
+            username = c.split('=')[1];
+        }
+    });
+    let page = document.generateElement('div');
+    for (let i = 0; i < data.length; i++) {
+        let emlemnet = document.generateElement('div', data[i].message);
+        if (data[i].user == username) {
+            emlemnet.classList.add('user');
+        } else {
+            emlemnet.classList.add('user2');
+        }
+        page.appendChild(emlemnet);
+    }
+    document.getElementById('history_msg').appendChild(page);
+}
 
 let createMSg2 = (msg) => {
     let msg_li = document.createElement('li');
