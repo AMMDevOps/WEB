@@ -25,8 +25,10 @@ io.on('connection', (socket) => {
     socket.on('page', async(data) => {
         let token = await auth.checkStoken(data);
         if (token != false){
+        socket.emit('token', token);
         let prev_page = await functions.getChatPage(data);
-        formated_page = JSON.stringify(prev_page);
+        console.log(prev_page);
+        formated_page = JSON.stringify({list: prev_page});
         socket.emit('history', formated_page);
         }
     });

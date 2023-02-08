@@ -36,6 +36,16 @@ socket.on('connect', () => {
     socket.emit('connected', txt);
 });
 
+socket.on('history', (data) => {
+    let list = JSON.parse(data);
+    console.log(list);
+    list.list.forEach(element => {
+        let message = element.split(';')[0];
+        createMSg2(message);
+    });
+    socketOk = true;
+});
+
 socket.on('token', (data) => {
     console.log(data);
 

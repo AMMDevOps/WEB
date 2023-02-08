@@ -4,8 +4,15 @@ let getChatPage = async (data) => {
     let inf = data.split(' ')[0];
     let page = inf.split(';')[0];
     let room_id = inf.split(';')[1];
-    let username = inf.split(';')[2];
-
+    let sql = `SELECT * FROM message WHERE roomid = ${room_id} AND page = ${page}`;
+    let res = await db.pls(sql)
+    let messages = res.rows;
+    let messages_formated = [];
+    for(let i = 0; i < messages.length; i++){
+        let user = await getUserName(messages[i].userid);
+        messages_formated.push({id: messages[i].id, user: user, message: messages[i].message, time: messages[i].time, page: messages[i].page});
+    }
+    return messages_formated;
 }
 
 let getUserSocket = async (userid) => {
