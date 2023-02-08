@@ -85,3 +85,7 @@ body{
     border-radius: 5px;
     cursor: pointer;
 }
+
+#page{
+    display: none;
+}

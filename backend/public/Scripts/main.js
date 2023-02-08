@@ -89,3 +89,12 @@ let send = () => {
     console.log('sending', msg);
     socket.emit('message', msg);
 }
+
+let pageUp = () => {
+    let page = document.getElementById('page').innerHTML;
+    page = parseInt(page);
+    page++;
+    document.getElementById('page').innerHTML = page;
+
+    socket.emit('page', page);
+}

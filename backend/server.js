@@ -22,6 +22,8 @@ io.on('connection', (socket) => {
         }
     });
 
+    socket
+
     socket.on('message', async(msg) => {
         let token = await auth.checkStoken(msg);
 
@@ -123,8 +125,9 @@ app.get('/lobby', auth.check, async(req, res) => {
 app.get('/chat', auth.check, async(req, res) => { 
     let room_id = parseInt(req.query.id);
     let chat = await functions.getChat(room_id);
+    let room_page = chat[0].page;
     let room_mate = await functions.getRoomMate(room_id, req.cookies.username);
-    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: room_mate, messages: chat, room: room_id,});
+    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: room_mate, messages: chat, room: room_id, page: room_page });
 });
 
 
