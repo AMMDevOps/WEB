@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3000');
+const socket = io('http://192.168.1.199:3000');
 
 let active = '';
 let socketOk = true;
@@ -65,17 +65,21 @@ let genHistory = (data) => {
             username = c.split('=')[1];
         }
     });
-    let page = document.generateElement('div');
+    let page = document.createElement('div');
     for (let i = 0; i < data.length; i++) {
-        let emlemnet = document.generateElement('div', data[i].message);
+        let element = document.createElement('div');
+        element.innerHTML = data[i].message;
         if (data[i].user == username) {
-            emlemnet.classList.add('user');
+            element.classList.add('user');
         } else {
-            emlemnet.classList.add('user2');
+            element.classList.add('user2');
         }
-        page.appendChild(emlemnet);
+        page.appendChild(element);
     }
-    document.getElementById('history_msg').appendChild(page);
+    let history = document.getElementById('history_msg');
+    let save = history.innerHTML;
+    history.innerHTML = page.innerHTML;
+    history.innerHTML += save;
 }
 
 let createMSg2 = (msg) => {
