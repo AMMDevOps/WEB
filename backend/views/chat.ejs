@@ -11,7 +11,10 @@
 </head>
 <body>
    <div id="msg">
-      <h1 onclick="alma()">TO <%= name %>!</h1>
+      <h1>TO <%= name %>!</h1>
+      <div class="navver_cont">
+      <button class="naver" onclick="pageUp()">></button>
+      </div>
       <div>
          <ul id="messages">
             <% for (let i = 0; i < messages.length; i++) { %>

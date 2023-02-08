@@ -14,7 +14,7 @@ li{
     list-style: none;
 }
 body{
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,4 +67,21 @@ body{
     background-color: #333;
     color: bisque;
     border: 1px solid bisque;
+}
+
+.navver_cont{
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.naver{
+    transform: rotate(-90deg);
+    background-color: bisque;
+    color: #333;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
 }

@@ -102,10 +102,13 @@ let getChat = async (room_id) => {
     let sql = `SELECT * FROM message WHERE roomid = ${room_id}`;
     let data = await db.pls(sql);
     let messages = data.rows.reverse();
+    let page = messages[0].page;
     let messages_formated = [];
     for(let i = 0; i < messages.length && i < 20; i++){
+        if (messages[i].page != page) {}else {
         let user = await getUserName(messages[i].userid);
-        messages_formated.push({id: messages[i].id, user: user, message: messages[i].message, time: messages[i].time});
+        messages_formated.push({id: messages[i].id, user: user, message: messages[i].message, time: messages[i].time, page: messages[i].page});
+        }
     }
     return messages_formated.reverse();
 }
