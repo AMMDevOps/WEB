@@ -38,11 +38,7 @@ socket.on('connect', () => {
 
 socket.on('history', (data) => {
     let list = JSON.parse(data);
-    console.log(list);
-    list.list.forEach(element => {
-        let message = element.split(';')[0];
-        createMSg2(message);
-    });
+    console.log(list.list);
     socketOk = true;
 });
 
@@ -114,13 +110,14 @@ let pageUp = () => {
     });
     let room = document.getElementById('room').value;
     let page = document.getElementById('page').innerHTML;
+    page = parseInt(page) - 1;
+    document.getElementById('page').innerHTML = page;
     page += ';';
     page += room;
     page += ';';
     page += username;
     page += ' ';
     page += active;
-    document.getElementById('page').innerHTML = page;
 
     socket.emit('page', page);
 }
