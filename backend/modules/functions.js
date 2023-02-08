@@ -39,11 +39,22 @@ let formatToMSG = (data)=>{
     
 }
 
+getPageId = async (room_id) => {
+    let sql = `SELECT * FROM message WHERE roomid = ${room_id}`;
+    let data = await db.pls(sql);
+    let all = data.rows.length;
+    console.log("all", all);
+    let page = Math.ceil(all / 19);
+    console.log("page", page);
+    return page;
+}
+
 let sendMsg = async (data, username) => {
     let time = getDateNow();
     let room_id = parseInt(data.room);
     let user_id = await getUserId(username);
-    let sql = `INSERT INTO message (roomid, userid, message, time) VALUES (${room_id}, ${user_id}, '${data.msg}', '${time}')`;
+    let page = await getPageId(room_id);
+    let sql = `INSERT INTO message (roomid, userid, message, time, page) VALUES (${room_id}, ${user_id}, '${data.msg}', '${time}', ${page})`;
     db.pls(sql);
 }
 
@@ -90,13 +101,13 @@ let getRoomMate = async (room_id, username) => {
 let getChat = async (room_id) => {
     let sql = `SELECT * FROM message WHERE roomid = ${room_id}`;
     let data = await db.pls(sql);
-    let messages = data.rows;
+    let messages = data.rows.reverse();
     let messages_formated = [];
-    for(let i = 0; i < messages.length; i++){
+    for(let i = 0; i < messages.length && i < 20; i++){
         let user = await getUserName(messages[i].userid);
         messages_formated.push({id: messages[i].id, user: user, message: messages[i].message, time: messages[i].time});
     }
-    return messages_formated;
+    return messages_formated.reverse();
 }
 
 let getRooms = async (username) => {
