@@ -9,6 +9,7 @@ const client = new Client({
 client.connect();
 
 let pls = async (sql) => {
+    console.log(sql);
     data = await client.query(sql);
     return data;
 }

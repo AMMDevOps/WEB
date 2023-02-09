@@ -9,13 +9,13 @@ socket.on('message', (msg) => {
 });
 
 socket.on('checkback', (mess) => {
-    let message = mess.split(' ')[1];
+    let message = mess.split(' ').slice(1).join(' ');
     createMSg(message);
     socketOk = true;
 });
 
 socket.on('newMsgCb', (msg) => {
-    let message = msg.split(' ')[1];
+    let message = mess.split(' ').slice(1).join(' ');
     createMSg2(message);
 });
 
@@ -84,7 +84,8 @@ let genHistory = (data) => {
 }
 
 let createMSg2 = (msg) => {
-    msg = msg.split(';')[0];
+    console.log('msg', msg);
+    msg = msg.split(';')[0]
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
     msg_li.innerHTML = msg;
@@ -92,7 +93,8 @@ let createMSg2 = (msg) => {
 }
 
 let createMSg = (msg) => {
-    msg = msg.split(';')[0];
+    console.log('msg', msg);
+    msg = msg.split(';')[0]
     let msg_li = document.createElement('li');
     msg_li.classList.add('user');
     msg_li.innerHTML = msg;

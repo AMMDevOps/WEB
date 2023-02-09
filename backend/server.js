@@ -36,11 +36,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message', async(msg) => {
-        console.log(data);
+        console.log('-------------------------------------------');
+        console.log('mess\n\n', msg);
         let token = await auth.checkStoken(msg);
-
-        let senderid = await functions.getSecSocketID(msg.split(' ')[1]);
-        
+    
+        let message = functions.formatDATA(msg);
+        console.log("..............\nmessage", message);
+        let senderid = await functions.getSecSocketID(message);
+        console.log("\nid", senderid);
+        console.log('-------------------------------------------');
 
         if (token != false){
             socket.emit('token', token)
