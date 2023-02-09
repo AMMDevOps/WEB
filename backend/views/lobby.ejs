@@ -8,7 +8,21 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="cont_new_friend">
+        <div id="lobby">
+                <ul>
+                    <% for (let i = 0; i < pot_friends.length; i++) { %>
+                        <form action="/addFriend" method="Post">
+                            <input type="hidden" name="name" value="<%= pot_friends[i].name %>">
+                            <button type="submit">Add friend</button>
+                        </form>
+                    <% } %>
+                </ul>
+        </div>
+    </div>
     <div id="cont">
+        <div id="header">
+            <h1>Chat App</h1>
         <div id="lobby">
                 <ul>
                     <% for (let i = 0; i < rooms.length; i++) { %>

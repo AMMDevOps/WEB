@@ -129,7 +129,8 @@ app.get('/', (req, res) => {
 app.get('/lobby', auth.check, async(req, res) => {
     console.log(req.cookies.username);
     let user_rooms = await functions.getRooms(req.cookies.username);
-    res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms });
+    let pot_friends = await functions.getPotFriends(req.cookies.username);
+    res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms, pot_friends: pot_friends});
 });
 
 //chat PAGE

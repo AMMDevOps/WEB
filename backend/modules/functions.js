@@ -178,9 +178,9 @@ let checkUser = async (data) => {
 //Reg user
 let genUser = (data) => {
     let username = data.username;
-    let email = 'alma@gmail.com';
-    let password1 = data.password;
-    let password2 = data.password;
+    let email = data.email;
+    let password1 = data.password1;
+    let password2 = data.password2;
     if (password1 == password2) {
         let sql = `INSERT INTO users (username, password, email) VALUES ('${username}', '${password1}', '${email}')`;
         db.pls(sql, (err, res) => {if (err) {console.log(err);} else {console.log('User created');}});
@@ -192,7 +192,36 @@ let genRoom = async(u1, u2)=>{
     db.pls(sql)
 }
 
+let getPotFriends = async (username) => {
+    let id = await getUserId(username);
+    let sql = `SELECT * FROM room WHERE useroneid  = ${id} OR usertwoid = ${id}`;
+    let data = await db.pls(sql);
+    let friends = data.rows;
+    let friends_formated = [];
+    for(let i = 0; i < friends.length; i++){
+        if (friends[i].useroneid == id) {
+            friends_formated.push(friends[i].usertwoid);
+        }
+        else {
+            friends_formated.push(friends[i].useroneid);
+        }
+    }
+    let slq2 = `SELECT * FROM users`;
+    let data2 = await db.pls(slq2);
+    let users = data2.rows;
+    let pot_friends = [];
+    for(let i = 0; i < users.length; i++){
+        if (users[i].id == id) {}else {
+            if (friends_formated.includes(users[i].id)) {}else {
+                pot_friends.push({name: users[i].username});
+            }
+        }
+    }
+    return pot_friends;
+}
+
 module.exports = {
+    getPotFriends,
     getChatPage,
     getSecSocketID,
     formatToMSG,

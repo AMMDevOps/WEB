@@ -8,6 +8,7 @@
     <title>AMM</title>
 </head>
 <body>
+    <div>
     <form action="/login" method="post">
         <label for="username">Username</label>
         <input id="username" type="text" name="username" placeholder="Username">
@@ -15,5 +16,19 @@
         <input id="password" type="password" name="password" placeholder="Password">
         <input type="submit" value="Login">
     </form>
+    </div>
+    <div>
+    <form action="/register" method="post">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" placeholder="Username">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="email">  
+        <label for="password">Password1</label>
+        <input id="password" type="password" name="password1" placeholder="Password1">
+        <label for="password">Password2</label>
+        <input id="password" type="password" name="password2" placeholder="Password2">
+        <input type="submit" value="register">
+    </form>
+    </div>
 </body>
 </html>
