@@ -1,7 +1,7 @@
 let db = require('./db');
 
 let getChatPage = async (data) => {
-    let inf = data.split(' ')[0];
+    let inf = data.split(' ')[1];
     let page = inf.split(';')[0];
     let room_id = inf.split(';')[1];
     let sql = `SELECT * FROM message WHERE roomid = ${room_id} AND page = ${page}`;
@@ -45,7 +45,7 @@ let setSocket = async (username, socket) => {
 }
 
 let formatToMSG = (data)=>{
-    let format = data.split(' ')[0];
+    let format = data.split(' ')[1];
     let msg = format.split(';')[0];
     let room = format.split(';')[1];
     let user = format.split(';')[2];

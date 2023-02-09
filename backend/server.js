@@ -55,8 +55,6 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-const { get } = require('http');
-const { format } = require('path');
 //const arduino = require('./modules/arduino');
 
 
@@ -112,7 +110,7 @@ app.post('/logout', auth.check, (req, res) => {
 
 
 app.post('/addFriend', auth.check, async(req, res) => {
-    functions.addFriend(req.body, req.cookies.username);
+    functions.addFriend(req.body.name, req.cookies.username);
     res.redirect('/lobby');
 });
 

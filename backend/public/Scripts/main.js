@@ -108,15 +108,16 @@ let send = () => {
             username = c.split('=')[1];
         }
     });
-    let msg = document.getElementById('msg_inp').value;
+    let msg = '';
+    msg += active;
+    msg += ' ';
+    msg += document.getElementById('msg_inp').value;
     document.getElementById('msg_inp').value = '';
     let room = document.getElementById('room').value;
     msg += ';';
     msg += room;
     msg += ';';
     msg += username;
-    msg += ' ';
-    msg += active;
     console.log('sending', msg);
     socket.emit('message', msg);
 }
