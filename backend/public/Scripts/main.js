@@ -134,16 +134,18 @@ let pageUp = () => {
             username = c.split('=')[1];
         }
     });
+    let page = '';
+    page += ' ';
+    page += active;
     let room = document.getElementById('room').value;
-    let page = document.getElementById('page').innerHTML;
+    page = document.getElementById('page').innerHTML;
     page = parseInt(page) - 1;
     document.getElementById('page').innerHTML = page;
     page += ';';
     page += room;
     page += ';';
     page += username;
-    page += ' ';
-    page += active;
+    
 
     socket.emit('page', page);
 }

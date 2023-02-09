@@ -99,7 +99,7 @@ async function checkStoken(data) {
 
 function startSocketValidating(data, sockid) {
     let list = data.split(' ');
-    let token = list[0];
+    let token = list[1];
 
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {console.log(err); return false;}

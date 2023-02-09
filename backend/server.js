@@ -12,6 +12,7 @@ const io = require('socket.io')(http, {cors: {origin: '*',}});
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('connected', async(data) => {
+        console.log(data);
         let username = data.split(' ')[0];
         let token = await auth.startSocketValidating(data, socket.id);
         if (token != false){
@@ -23,6 +24,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('page', async(data) => {
+        console.log(data);
         let token = await auth.checkStoken(data);
         if (token != false){
         socket.emit('token', token);
@@ -34,6 +36,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message', async(msg) => {
+        console.log(data);
         let token = await auth.checkStoken(msg);
 
         let senderid = await functions.getSecSocketID(msg.split(' ')[0]);
