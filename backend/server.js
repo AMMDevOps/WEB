@@ -110,10 +110,10 @@ app.post('/logout', auth.check, (req, res) => {
     res.redirect("/");
 });
 
-//send MSG
-app.post('/msg', auth.check, (req, res) => {
-    functions.sendMsg(req.body, req.cookies.username);
-    res.redirect(`/chat/?id=${req.body.room}`);
+
+app.post('/addFriend', auth.check, async(req, res) => {
+    functions.addFriend(req.body, req.cookies.username);
+    res.redirect('/lobby');
 });
 
 

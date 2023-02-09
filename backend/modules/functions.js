@@ -220,7 +220,16 @@ let getPotFriends = async (username) => {
     return pot_friends;
 }
 
+let addFriend = async (username, friend) => {
+    let id = await getUserId(username);
+    let friend_id = await getUserId(friend);
+    let sql = `INSERT INTO room (useroneid, usertwoid) VALUES (${id}, ${friend_id})`;
+    db.pls(sql);
+}
+
+
 module.exports = {
+    addFriend,
     getPotFriends,
     getChatPage,
     getSecSocketID,
