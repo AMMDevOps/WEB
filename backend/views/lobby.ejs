@@ -24,10 +24,11 @@
         <div id="header">
             <h1>Chat App</h1>
         <div id="lobby">
-                <ul>
+                <ul> 
                     <% for (let i = 0; i < rooms.length; i++) { %>
+                        <div><%= pot_friends[i].name %></div>
                         <form action="/join" method="Post">
-                            <input type="hidden" name="room" value="<%= rooms[i].id %>">
+                            <input type="hidden" name="room" value="<%= rooms[i].id %>">  
                             <input type="submit" value="<%= rooms[i].name %>">
                         </form>
                     <% } %>
