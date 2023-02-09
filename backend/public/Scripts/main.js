@@ -9,13 +9,13 @@ socket.on('message', (msg) => {
 });
 
 socket.on('checkback', (mess) => {
-    let message = mess.split(';')[0];
+    let message = mess.split(' ')[1];
     createMSg(message);
     socketOk = true;
 });
 
 socket.on('newMsgCb', (msg) => {
-    let message = msg.split(';')[0];
+    let message = msg.split(' ')[1];
     createMSg2(message);
 });
 
@@ -43,10 +43,11 @@ socket.on('history', (data) => {
 });
 
 socket.on('token', (data) => {
-    console.log(data);
-
+    console.log("token", data);
     if (data != 'false') {
+        console.log('token ok');
         active = data;
+        socketOk = true;
     }
 });
 

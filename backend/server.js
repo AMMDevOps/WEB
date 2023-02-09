@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
         console.log(data);
         let token = await auth.checkStoken(msg);
 
-        let senderid = await functions.getSecSocketID(msg.split(' ')[0]);
+        let senderid = await functions.getSecSocketID(msg.split(' ')[1]);
         
 
         if (token != false){
