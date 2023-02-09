@@ -84,6 +84,7 @@ let genHistory = (data) => {
 }
 
 let createMSg2 = (msg) => {
+    msg = msg.split(';')[0];
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
     msg_li.innerHTML = msg;
@@ -91,6 +92,7 @@ let createMSg2 = (msg) => {
 }
 
 let createMSg = (msg) => {
+    msg = msg.split(';')[0];
     let msg_li = document.createElement('li');
     msg_li.classList.add('user');
     msg_li.innerHTML = msg;
