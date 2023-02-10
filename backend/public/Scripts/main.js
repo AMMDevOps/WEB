@@ -3,19 +3,19 @@ const socket = io('http://localhost:3000');
 let active = '';
 let socketOk = true;
 
-socket.on('message', (data) => {
-    data = JSON.parse(data);
+socket.on('message', (dt) => {
+    let data = JSON.parse(dt);
     console.log(data);
 });
 
-socket.on('checkback', (data) => {
-    data = JSON.parse(data);
+socket.on('checkback', (dt) => {
+    let data = JSON.parse(dt);
     createMSg(data);
     socketOk = true;
 });
 
-socket.on('newMsgCb', (data) => {
-    data = JSON.parse(data);
+socket.on('newMsgCb', (dt) => {
+    let data = JSON.parse(dt);
     createMSg2(data);
 });
 
@@ -27,14 +27,14 @@ socket.on('connect', () => {
     socket.emit('connected', sendback);
 });
 
-socket.on('history', (data) => {
-    let list = JSON.parse(data);
+socket.on('history', (dt) => {
+    let list = JSON.parse(dt);
     genHistory(list.list)
     socketOk = true;
 });
 
-socket.on('token', (data) => {
-    let data = JSON.parse(data)
+socket.on('token', (dt) => {
+    let data = JSON.parse(dt)
     console.log("token "+ data);
     if (data.token != 'false') {
         console.log('token ok');
