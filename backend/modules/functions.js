@@ -1,9 +1,9 @@
 let db = require('./db');
 
 let getChatPage = async (data) => {
-    let inf = data.split(' ')[1];
-    let page = inf.split(';')[0];
-    let room_id = inf.split(';')[1];
+
+    let page = data.page;
+    let room_id = data.room;
     let sql = `SELECT * FROM message WHERE roomid = ${room_id} AND page = ${page}`;
     let res = await db.pls(sql)
     let messages = res.rows;
@@ -21,26 +21,12 @@ let getUserSocket = async (userid) => {
     return result.rows[0].socketid;
 }
 
-let formatDATA = (data) => {
-    console.log('Ez egy fos ami soha nem fog müködni edas fh dsjdsí iozpfzfhj fgsdakíviohégjsk yélhjg ufioapdesízhkjphfgíaljhfkj ysdhlxdéíás');
-    let message = '';
-    let msg = data.split(' ').slice(1);
-    console.log(".-.-.--.-.-.-.-.-..--\n", msg);
-    for (let i = 0; i < msg.length; i++) {
-        message += msg[i];
-        if (i != msg.length - 1) {
-            message += ' ';
-        }
-    }
-    console.log(message);
-    return message;
-}
-
 let getSecSocketID = async (data) => {
-    let room = data.split(';')[1];
-    let user = data.split(';')[2];
+    let room = data.room
+    let user = data.user
 
     console.log("a.a..a.a.a.a.aa", user);
+
     let userid = await getUserId(user);
 
     let sql = `SELECT * FROM room WHERE id = ${room}`;
@@ -60,18 +46,6 @@ let setSocket = async (username, socket) => {
     db.pls(sql);
 }
 
-let formatToMSG = (data)=>{
-
-    let format = formatDATA(data);
-    console.log("format.f.f.f..f.f", format);
-    let msg = format.split(';')[0];
-    let room = format.split(';')[1];
-    let user = format.split(';')[2];
-    sendMsg({msg: msg, room: room}, user);
-    //working
-    
-}
-
 getPageId = async (room_id) => {
     let sql = `SELECT * FROM message WHERE roomid = ${room_id}`;
     let data = await db.pls(sql);
@@ -82,10 +56,10 @@ getPageId = async (room_id) => {
     return page;
 }
 
-let sendMsg = async (data, username) => {
+let sendMsg = async (data) => {
     let time = getDateNow();
     let room_id = parseInt(data.room);
-    let user_id = await getUserId(username);
+    let user_id = await getUserId(data.user);
     let page = await getPageId(room_id);
     let sql = `INSERT INTO message (roomid, userid, message, time, page) VALUES (${room_id}, ${user_id}, '${data.msg}', '${time}', ${page})`;
     db.pls(sql);
@@ -248,12 +222,10 @@ let addFriend = async (username, friend) => {
 
 
 module.exports = {
-    formatDATA,
     addFriend,
     getPotFriends,
     getChatPage,
     getSecSocketID,
-    formatToMSG,
     genRoom,
     setSocket,
     sendMsg,

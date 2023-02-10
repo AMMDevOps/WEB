@@ -12,45 +12,61 @@ const io = require('socket.io')(http, {cors: {origin: '*',}});
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('connected', async(data) => {
+        data = JSON.parse(data)
         console.log(data);
-        let username = data.split(' ')[0];
+        let username = data.user;
         let token = await auth.startSocketValidating(data, socket.id);
         if (token != false){
             functions.setSocket(username, socket.id);
-            socket.emit('token', token);
+            let sendback = JSON.stringify({token: token})
+            socket.emit('token', sendback);
         } else {
             socket.emit('token', 'false');
         }
     });
 
     socket.on('page', async(data) => {
+        data = JSON.parse(data)
         console.log("page", data);
+
         let token = await auth.checkStoken(data);
+
         if (token != false){
-        socket.emit('token', token);
-        let prev_page = await functions.getChatPage(data);
-        console.log(prev_page);
-        formated_page = JSON.stringify({list: prev_page});
-        socket.emit('history', formated_page);
+            let sendback = JSON.stringify({token: token})
+            socket.emit('token', sendback);
+
+            let prev_page = await functions.getChatPage(data);
+            console.log(prev_page);
+
+            formated_page = JSON.stringify({list: prev_page});
+            socket.emit('history', formated_page);
         }
     });
 
-    socket.on('message', async(msg) => {
+    socket.on('message', async(data) => {
+        data = JSON.parse(data)
+
         console.log('-------------------------------------------');
-        console.log('mess\n\n', msg);
-        let token = await auth.checkStoken(msg);
+        console.log('mess\n\n', data);
+
+        let token = await auth.checkStoken(data);
     
-        let message = functions.formatDATA(msg);
-        console.log("..............\nmessage", message);
-        let senderid = await functions.getSecSocketID(message);
+        console.log("..............\nmessage", data.msg);
+
+        let senderid = await functions.getSecSocketID(data);
+
         console.log("\nSOCKETid", senderid);
         console.log('-------------------------------------------');
 
         if (token != false){
-            socket.emit('token', token)
-            functions.formatToMSG(msg);
-            io.to(senderid).emit('newMsgCb', msg);
-            socket.emit('checkback', msg);
+            let sendback = JSON.stringify({token: token})
+            socket.emit('token', sendback);
+
+            functions.sendMsg(data);
+
+            io.to(senderid).emit('newMsgCb', data);
+            
+            socket.emit('checkback', data);
         }
     });
 

@@ -3,37 +3,28 @@ const socket = io('http://localhost:3000');
 let active = '';
 let socketOk = true;
 
-socket.on('message', (msg) => {
-    let message = msg.split(';');
-    console.log(message);
+socket.on('message', (data) => {
+    data = JSON.parse(data);
+    console.log(data);
 });
 
-socket.on('checkback', (mess) => {
-    let message = mess.split(' ').slice(1).join(' ');
-    createMSg(message);
+socket.on('checkback', (data) => {
+    data = JSON.parse(data);
+    createMSg(data);
     socketOk = true;
 });
 
-socket.on('newMsgCb', (msg) => {
-    let message = msg.split(' ').slice(1).join(' ');
-    createMSg2(message);
+socket.on('newMsgCb', (data) => {
+    data = JSON.parse(data);
+    createMSg2(data);
 });
 
 
 
 socket.on('connect', () => {
-    let list = document.cookie.split(';');
-    let txt = '';
-    list.forEach(element => {
-        if (element.includes('username')) {
-            txt += element.split('=')[1];
-            txt += ' ';
-        }
-        if (element.includes('authtoken')) {
-            txt += element.split('=')[1];
-        }
-    });
-    socket.emit('connected', txt);
+    let auth = getauthtoken()
+    let sendback = genSendBack(auth)
+    socket.emit('connected', sendback);
 });
 
 socket.on('history', (data) => {
@@ -43,10 +34,11 @@ socket.on('history', (data) => {
 });
 
 socket.on('token', (data) => {
+    let data = JSON.parse(data)
     console.log("token "+ data);
-    if (data != 'false') {
+    if (data.token != 'false') {
         console.log('token ok');
-        active = data;
+        active = data.token;
         socketOk = true;
     }
 });
@@ -58,14 +50,37 @@ addEventListener('keydown', (e) => {
     }
 });
 
-let genHistory = (data) => {
-    let cookies = document.cookie.split(';');
-    let username = '';
-    cookies.forEach(c => {
-        if (c.includes('username')) {
-            username = c.split('=')[1];
+let genSendBack = (msg, room) =>{
+    let user = getUsername()
+    let msgback = JSON.stringify({token: active, msg: msg, room: room, user: user})
+    return msgback
+}
+
+let getUsername = () =>{
+    let list = document.cookie.split(';');
+    let txt = '';
+    list.forEach(element => {
+        if (element.includes('username')) {
+            txt += element.split('=')[1];
         }
     });
+    return txt
+}
+
+let getauthtoken = () =>{
+    let list = document.cookie.split(';');
+    let txt = '';
+    list.forEach(element => {
+        if (element.includes('authtoken')) {
+            txt += element.split('=')[1];
+        }
+    });
+    return txt;
+}
+
+
+let genHistory = (data) => {
+    let username = getUsername();
     let page = document.createElement('div');
     for (let i = 0; i < data.length; i++) {
         let element = document.createElement('div');
@@ -83,21 +98,17 @@ let genHistory = (data) => {
     history.innerHTML += save;
 }
 
-let createMSg2 = (msg) => {
-    console.log('msg', msg);
-    msg = msg.split(';')[0]
+let createMSg2 = (data) => {
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
-    msg_li.innerHTML = msg;
+    msg_li.innerHTML = data.msg;
     document.getElementById('messages').appendChild(msg_li);
 }
 
-let createMSg = (msg) => {
-    console.log('msg', msg);
-    msg = msg.split(';')[0]
+let createMSg = (data) => {
     let msg_li = document.createElement('li');
     msg_li.classList.add('user');
-    msg_li.innerHTML = msg;
+    msg_li.innerHTML = data.msg;
     document.getElementById('messages').appendChild(msg_li);
 }
 
@@ -106,25 +117,12 @@ let send = () => {
         return;
     }
     socketOk = false;
-    let cookie = document.cookie.split(';');
-    let username = '';
-    cookie.forEach(c => {
-        if (c.includes('username')) {
-            username = c.split('=')[1];
-        }
-    });
-    let msg = '';
-    msg += active;
-    msg += ' ';
-    msg += document.getElementById('msg_inp').value;
+    msg = document.getElementById('msg_inp').value;
     document.getElementById('msg_inp').value = '';
     let room = document.getElementById('room').value;
-    msg += ';';
-    msg += room;
-    msg += ';';
-    msg += username;
-    console.log('sending', msg);
-    socket.emit('message', msg);
+    let sendback = genSendBack(msg, room)
+    console.log('sending', sendback);
+    socket.emit('message', sendback);
 }
 
 let pageUp = () => {
@@ -132,27 +130,10 @@ let pageUp = () => {
         return;
     }
     socketOk = false;
-    let cookie = document.cookie.split(';');
-    let username = '';
-    cookie.forEach(c => {
-        if (c.includes('username')) {
-            username = c.split('=')[1];
-        }
-    });
-    let page = '';
-    console.log(active);
-    page += active;
-    page += ' ';
     let room = document.getElementById('room').value;
     let data = document.getElementById('page').innerHTML;
     data = parseInt(data) - 1;
-    page += data
     document.getElementById('page').innerHTML = data;
-    page += ';';
-    page += room;
-    page += ';';
-    page += username;
-    
-
-    socket.emit('page', page);
+    let sendback = genSendBack(data, room)
+    socket.emit('page', sendback);
 }

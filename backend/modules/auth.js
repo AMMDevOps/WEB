@@ -74,7 +74,7 @@ function loginUser(data) {
 }
 
 async function checkStoken(data) {
-    let token = data.split(' ')[0];
+    let token = data.token
 
     let newtoken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err){console.log(err);return false;}
@@ -98,8 +98,7 @@ async function checkStoken(data) {
 
 
 function startSocketValidating(data, sockid) {
-    let list = data.split(' ');
-    let token = list[1];
+    let token = data.token
 
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {console.log(err); return false;}
