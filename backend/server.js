@@ -12,6 +12,7 @@ const io = require('socket.io')(http, {cors: {origin: '*',}});
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('connected', async(data) => {
+        console.log(data);
         let username = data.split(' ')[0];
         let token = await auth.startSocketValidating(data, socket.id);
         if (token != false){
@@ -23,6 +24,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('page', async(data) => {
+        console.log(data);
         let token = await auth.checkStoken(data);
         if (token != false){
         socket.emit('token', token);
@@ -34,10 +36,15 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message', async(msg) => {
+        console.log('-------------------------------------------');
+        console.log('mess\n\n', msg);
         let token = await auth.checkStoken(msg);
-
-        let senderid = await functions.getSecSocketID(msg.split(' ')[0]);
-        
+    
+        let message = functions.formatDATA(msg);
+        console.log("..............\nmessage", message);
+        let senderid = await functions.getSecSocketID(message);
+        console.log("\nid", senderid);
+        console.log('-------------------------------------------');
 
         if (token != false){
             socket.emit('token', token)
@@ -55,8 +62,6 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-const { get } = require('http');
-const { format } = require('path');
 //const arduino = require('./modules/arduino');
 
 
@@ -110,10 +115,10 @@ app.post('/logout', auth.check, (req, res) => {
     res.redirect("/");
 });
 
-//send MSG
-app.post('/msg', auth.check, (req, res) => {
-    functions.sendMsg(req.body, req.cookies.username);
-    res.redirect(`/chat/?id=${req.body.room}`);
+
+app.post('/addFriend', auth.check, async(req, res) => {
+    functions.addFriend(req.body.name, req.cookies.username);
+    res.redirect('/lobby');
 });
 
 
@@ -129,7 +134,8 @@ app.get('/', (req, res) => {
 app.get('/lobby', auth.check, async(req, res) => {
     console.log(req.cookies.username);
     let user_rooms = await functions.getRooms(req.cookies.username);
-    res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms });
+    let pot_friends = await functions.getPotFriends(req.cookies.username);
+    res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms, pot_friends: pot_friends});
 });
 
 //chat PAGE

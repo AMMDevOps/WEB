@@ -9,13 +9,13 @@ socket.on('message', (msg) => {
 });
 
 socket.on('checkback', (mess) => {
-    let message = mess.split(';')[0];
+    let message = mess.split(' ').slice(1).join(' ');
     createMSg(message);
     socketOk = true;
 });
 
 socket.on('newMsgCb', (msg) => {
-    let message = msg.split(';')[0];
+    let message = mess.split(' ').slice(1).join(' ');
     createMSg2(message);
 });
 
@@ -43,10 +43,11 @@ socket.on('history', (data) => {
 });
 
 socket.on('token', (data) => {
-    console.log(data);
-
+    console.log("token", data);
     if (data != 'false') {
+        console.log('token ok');
         active = data;
+        socketOk = true;
     }
 });
 
@@ -83,6 +84,8 @@ let genHistory = (data) => {
 }
 
 let createMSg2 = (msg) => {
+    console.log('msg', msg);
+    msg = msg.split(';')[0]
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
     msg_li.innerHTML = msg;
@@ -90,6 +93,8 @@ let createMSg2 = (msg) => {
 }
 
 let createMSg = (msg) => {
+    console.log('msg', msg);
+    msg = msg.split(';')[0]
     let msg_li = document.createElement('li');
     msg_li.classList.add('user');
     msg_li.innerHTML = msg;
@@ -108,15 +113,16 @@ let send = () => {
             username = c.split('=')[1];
         }
     });
-    let msg = document.getElementById('msg_inp').value;
+    let msg = '';
+    msg += active;
+    msg += ' ';
+    msg += document.getElementById('msg_inp').value;
     document.getElementById('msg_inp').value = '';
     let room = document.getElementById('room').value;
     msg += ';';
     msg += room;
     msg += ';';
     msg += username;
-    msg += ' ';
-    msg += active;
     console.log('sending', msg);
     socket.emit('message', msg);
 }
@@ -133,16 +139,18 @@ let pageUp = () => {
             username = c.split('=')[1];
         }
     });
+    let page = '';
+    page += ' ';
+    page += active;
     let room = document.getElementById('room').value;
-    let page = document.getElementById('page').innerHTML;
+    page = document.getElementById('page').innerHTML;
     page = parseInt(page) - 1;
     document.getElementById('page').innerHTML = page;
     page += ';';
     page += room;
     page += ';';
     page += username;
-    page += ' ';
-    page += active;
+    
 
     socket.emit('page', page);
 }

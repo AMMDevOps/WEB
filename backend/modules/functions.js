@@ -1,7 +1,7 @@
 let db = require('./db');
 
 let getChatPage = async (data) => {
-    let inf = data.split(' ')[0];
+    let inf = data.split(' ')[1];
     let page = inf.split(';')[0];
     let room_id = inf.split(';')[1];
     let sql = `SELECT * FROM message WHERE roomid = ${room_id} AND page = ${page}`;
@@ -21,10 +21,26 @@ let getUserSocket = async (userid) => {
     return result.rows[0].socketid;
 }
 
+let formatDATA = (data) => {
+    console.log('Ez egy fos ami soha nem fog müködni edas fh dsjdsí iozpfzfhj fgsdakíviohégjsk yélhjg ufioapdesízhkjphfgíaljhfkj ysdhlxdéíás');
+    let message = '';
+    let msg = data.split(' ').slice(1);
+    console.log(".-.-.--.-.-.-.-.-..--\n", msg);
+    for (let i = 0; i < msg.length; i++) {
+        message += msg[i];
+        if (i != msg.length - 1) {
+            message += ' ';
+        }
+    }
+    console.log(message);
+    return message;
+}
+
 let getSecSocketID = async (data) => {
     let room = data.split(';')[1];
     let user = data.split(';')[2];
 
+    console.log("a.a..a.a.a.a.aa", user);
     let userid = await getUserId(user);
 
     let sql = `SELECT * FROM room WHERE id = ${room}`;
@@ -45,7 +61,9 @@ let setSocket = async (username, socket) => {
 }
 
 let formatToMSG = (data)=>{
-    let format = data.split(' ')[0];
+
+    let format = formatDATA(data);
+    console.log("format.f.f.f..f.f", format);
     let msg = format.split(';')[0];
     let room = format.split(';')[1];
     let user = format.split(';')[2];
@@ -178,9 +196,9 @@ let checkUser = async (data) => {
 //Reg user
 let genUser = (data) => {
     let username = data.username;
-    let email = 'alma@gmail.com';
-    let password1 = data.password;
-    let password2 = data.password;
+    let email = data.email;
+    let password1 = data.password1;
+    let password2 = data.password2;
     if (password1 == password2) {
         let sql = `INSERT INTO users (username, password, email) VALUES ('${username}', '${password1}', '${email}')`;
         db.pls(sql, (err, res) => {if (err) {console.log(err);} else {console.log('User created');}});
@@ -192,7 +210,47 @@ let genRoom = async(u1, u2)=>{
     db.pls(sql)
 }
 
+let getPotFriends = async (username) => {
+    console.log(".e.e.e.e..ee.\n", username);
+    let id = await getUserId(username);
+    let sql = `SELECT * FROM room WHERE useroneid  = ${id} OR usertwoid = ${id}`;
+    let data = await db.pls(sql);
+    let friends = data.rows;
+    let friends_formated = [];
+    for(let i = 0; i < friends.length; i++){
+        if (friends[i].useroneid == id) {
+            friends_formated.push(friends[i].usertwoid);
+        }
+        else {
+            friends_formated.push(friends[i].useroneid);
+        }
+    }
+    let slq2 = `SELECT * FROM users`;
+    let data2 = await db.pls(slq2);
+    let users = data2.rows;
+    let pot_friends = [];
+    for(let i = 0; i < users.length; i++){
+        if (users[i].id == id) {}else {
+            if (friends_formated.includes(users[i].id)) {}else {
+                pot_friends.push({name: users[i].username});
+            }
+        }
+    }
+    return pot_friends;
+}
+
+let addFriend = async (username, friend) => {
+    let id = await getUserId(username);
+    let friend_id = await getUserId(friend);
+    let sql = `INSERT INTO room (useroneid, usertwoid) VALUES (${id}, ${friend_id})`;
+    db.pls(sql);
+}
+
+
 module.exports = {
+    formatDATA,
+    addFriend,
+    getPotFriends,
     getChatPage,
     getSecSocketID,
     formatToMSG,
