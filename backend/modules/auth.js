@@ -98,7 +98,7 @@ async function checkStoken(data) {
 
 
 function startSocketValidating(data, sockid) {
-    let token = data.token
+    let token = data.msg
 
     let auth = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async(err, user) => {
         if (err) {console.log(err); return false;}

@@ -1,8 +1,10 @@
 let db = require('./db');
 
 let getChatPage = async (data) => {
-
-    let page = data.page;
+    console.log('====================================');
+    console.log(data);
+    console.log('====================================');
+    let page = data.msg;
     let room_id = data.room;
     let sql = `SELECT * FROM message WHERE roomid = ${room_id} AND page = ${page}`;
     let res = await db.pls(sql)

@@ -4,6 +4,16 @@
     box-sizing: border-box;
 }
 
+input, #lobby ul form input{
+    background-color: #000000;
+    color: bisque;
+    border: none;
+    box-shadow: 3px 3px 4px white;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
 h1{
     text-align: center;
     color: bisque;
@@ -14,9 +24,11 @@ li{
     list-style: none;
 }
 body{
+    color: bisque;
+    background-color: #2b2b2b;
     min-height: 100vh;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 #msg{
@@ -43,18 +55,21 @@ body{
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    box-shadow: none;
 }
 
 #sendmsg input[type="submit"]{
     background-color: bisque;
     color: #333;
     border: none;
+    box-shadow: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
 }
 
 #sendmsg input[type="text"]{
+    box-shadow: none;
     width: 90%;
     padding: 5px;
     border: none;
@@ -90,4 +105,17 @@ body{
 
 #page{
     display: none;
+}
+
+#logcont form, #regcont form{
+    border-radius: 20px;
+    box-shadow: 10px 10px 10px red;
+    flex-direction: column;
+    height: 50vh;
+    width: 20vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.259);
 }

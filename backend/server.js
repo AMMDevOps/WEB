@@ -19,6 +19,9 @@ io.on('connection', (socket) => {
         if (token != false){
             functions.setSocket(username, socket.id);
             let sendback = JSON.stringify({token: token})
+            console.log('====================================');
+            console.log(sendback);
+            console.log('====================================');
             socket.emit('token', sendback);
         } else {
             socket.emit('token', 'false');

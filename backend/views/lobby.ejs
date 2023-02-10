@@ -9,13 +9,14 @@
 </head>
 <body>
     <div id="cont_new_friend">
+        <h1>pot_friends</h1>
         <div id="lobby">
                 <ul>
                     <% for (let i = 0; i < pot_friends.length; i++) { %>
                         <div><%= pot_friends[i].name %></div>
                         <form action="/addFriend" method="Post">
                             <input type="hidden" name="name" value="<%= pot_friends[i].name %>">
-                            <button type="submit">Add friend</button>
+                            <input type="submit" value="Barát hozzáadása">
                         </form>
                     <% } %>
                 </ul>
