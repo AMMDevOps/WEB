@@ -15,7 +15,7 @@ socket.on('checkback', (mess) => {
 });
 
 socket.on('newMsgCb', (msg) => {
-    let message = mess.split(' ').slice(1).join(' ');
+    let message = msg.split(' ').slice(1).join(' ');
     createMSg2(message);
 });
 
@@ -43,7 +43,7 @@ socket.on('history', (data) => {
 });
 
 socket.on('token', (data) => {
-    console.log("token", data);
+    console.log("token "+ data);
     if (data != 'false') {
         console.log('token ok');
         active = data;
@@ -140,12 +140,14 @@ let pageUp = () => {
         }
     });
     let page = '';
-    page += ' ';
+    console.log(active);
     page += active;
+    page += ' ';
     let room = document.getElementById('room').value;
-    page = document.getElementById('page').innerHTML;
-    page = parseInt(page) - 1;
-    document.getElementById('page').innerHTML = page;
+    let data = document.getElementById('page').innerHTML;
+    data = parseInt(data) - 1;
+    page += data
+    document.getElementById('page').innerHTML = data;
     page += ';';
     page += room;
     page += ';';

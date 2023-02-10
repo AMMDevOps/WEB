@@ -24,7 +24,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('page', async(data) => {
-        console.log(data);
+        console.log("page", data);
         let token = await auth.checkStoken(data);
         if (token != false){
         socket.emit('token', token);
@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
         let message = functions.formatDATA(msg);
         console.log("..............\nmessage", message);
         let senderid = await functions.getSecSocketID(message);
-        console.log("\nid", senderid);
+        console.log("\nSOCKETid", senderid);
         console.log('-------------------------------------------');
 
         if (token != false){
