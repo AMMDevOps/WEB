@@ -18,14 +18,14 @@
             <% for (let i = 0; i < rooms.length; i++) { %>
                <form class="center" action="/join" method="Post">
                   <input type="hidden" name="room" value="<%= rooms[i].id %>">
-                  <input type="submit" value="<%= rooms[i].name %>">
+                  <input class="users" type="submit" value="<%= rooms[i].name %>">
                </form>
             <% } %>
          </ul>
       </div>
    </div>
    <div id="msg">
-      <h1><%= name %>!</h1>
+      <h1 id="name"><%= name %></h1>
       <div class="navver_cont">
       <button class="naver" onclick="pageUp()">></button>
       </div>

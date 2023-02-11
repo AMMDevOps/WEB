@@ -94,11 +94,29 @@ let genHistory = (data) => {
     history.innerHTML += save;
 }
 
+let justalert = (data) =>{
+    let user2 = document.querySelector('#name')
+    if(data.user == user2.innerHTML){
+        return false
+    }
+    else{
+        let other_users = document.querySelectorAll('.users')
+        for (let i = 0; i < other_users.length; i++) {
+            if(data.user == other_users[i].value){
+                other_users[i].getElementsByClassName.backgroundcolor = "red";
+                return true
+            }
+        }
+    }
+}
+
 let createMSg2 = (data) => {
+    if(!justalert(data)){
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
     msg_li.innerHTML = data.msg;
     document.getElementById('messages').appendChild(msg_li);
+    }
 }
 
 let createMSg = (data) => {
