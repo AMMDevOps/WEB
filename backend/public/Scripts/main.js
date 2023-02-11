@@ -4,21 +4,16 @@ let active = '';
 let socketOk = true;
 
 socket.on('message', (dt) => {
-    console.log('====================================');
-    console.log(dt);
-    console.log('====================================');
     let data = JSON.parse(dt);
-    console.log("mess", data.token);
+    console.log("message", data);
 });
 
 socket.on('checkback', (data) => {
-    console.log("jsoned", data);
     createMSg(data);
     socketOk = true;
 });
 
 socket.on('newMsgCb', (data) => {
-    console.log(data);
     createMSg2(data);
 });
 
@@ -38,9 +33,7 @@ socket.on('history', (dt) => {
 
 socket.on('token', (dt) => {
     let data = JSON.parse(dt)
-    console.log("token ", data);
     if (data.token != 'false') {
-        console.log('token ok');
         active = data.token;
         socketOk = true;
     }
@@ -102,9 +95,6 @@ let genHistory = (data) => {
 }
 
 let createMSg2 = (data) => {
-    console.log('====================================');
-    console.log(data);
-    console.log('====================================');
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
     msg_li.innerHTML = data.msg;
@@ -112,9 +102,6 @@ let createMSg2 = (data) => {
 }
 
 let createMSg = (data) => {
-    console.log('====================================');
-    console.log(data);
-    console.log('====================================');
     let msg_li = document.createElement('li');
     msg_li.classList.add('user');
     msg_li.innerHTML = data.msg;
@@ -130,7 +117,6 @@ let send = () => {
     document.getElementById('msg_inp').value = '';
     let room = document.getElementById('room').value;
     let sendback = genSendBack(msg, room)
-    console.log('sending', sendback);
     socket.emit('message', sendback);
 }
 

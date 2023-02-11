@@ -12,16 +12,15 @@ const io = require('socket.io')(http, {cors: {origin: '*',}});
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('connected', async(data) => {
+        
         data = JSON.parse(data)
-        console.log(data);
         let username = data.user;
         let token = await auth.startSocketValidating(data, socket.id);
+
         if (token != false){
             functions.setSocket(username, socket.id);
+
             let sendback = JSON.stringify({token: token})
-            console.log('====================================');
-            console.log(sendback);
-            console.log('====================================');
             socket.emit('token', sendback);
         } else {
             socket.emit('token', 'false');
@@ -29,9 +28,8 @@ io.on('connection', (socket) => {
     });
 
     socket.on('page', async(data) => {
-        data = JSON.parse(data)
-        console.log("page", data);
 
+        data = JSON.parse(data)
         let token = await auth.checkStoken(data);
 
         if (token != false){
@@ -39,7 +37,6 @@ io.on('connection', (socket) => {
             socket.emit('token', sendback);
 
             let prev_page = await functions.getChatPage(data);
-            console.log(prev_page);
 
             formated_page = JSON.stringify({list: prev_page});
             socket.emit('history', formated_page);
@@ -47,28 +44,18 @@ io.on('connection', (socket) => {
     });
 
     socket.on('message', async(data) => {
+        
         data = JSON.parse(data)
-
-        console.log('-------------------------------------------');
-        console.log('mess\n\n', data);
-
         let token = await auth.checkStoken(data);
-    
-        console.log("..............\nmessage", data.msg);
-
         let senderid = await functions.getSecSocketID(data);
 
-        console.log("\nSOCKETid", senderid);
-        console.log('-------------------------------------------');
-
         if (token != false){
+
             let sendback = JSON.stringify({token: token})
             socket.emit('token', sendback);
 
             functions.sendMsg(data);
-
-            io.to(senderid).emit('newMsgCb', data);
-            
+            io.to(senderid).emit('newMsgCb', data);            
             socket.emit('checkback', data);
         }
     });
@@ -113,8 +100,9 @@ app.post('/login', async(req, res) => {
         res.clearCookie("authtoken");
         res.clearCookie("username");
         res.clearCookie("sockettoken");
-        console.log("----------------------");
+
         let authtoken = auth.loginUser(req.body);
+
         res.cookie('authtoken', authtoken,);
         res.cookie('username', req.body.username);
         res.redirect(`/lobby`);
@@ -151,20 +139,26 @@ app.get('/', (req, res) => {
 
 //lobby PAGE
 app.get('/lobby', auth.check, async(req, res) => {
-    console.log(req.cookies.username);
+
     let user_rooms = await functions.getRooms(req.cookies.username);
     let pot_friends = await functions.getPotFriends(req.cookies.username);
+
     res.render(path.join(__dirname, 'views', 'lobby.ejs'), { rooms: user_rooms, pot_friends: pot_friends});
 });
 
 //chat PAGE
 app.get('/chat', auth.check, async(req, res) => { 
+
     let room_id = parseInt(req.query.id);
     let chat = await functions.getChat(room_id);
     let room_page = 1;
+
     if (chat.length > 0) room_page = chat[0].page;
+
+    let user_rooms = await functions.getRooms(req.cookies.username);
     let room_mate = await functions.getRoomMate(room_id, req.cookies.username);
-    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: room_mate, messages: chat, room: room_id, page: room_page });
+
+    res.render(path.join(__dirname, 'views', 'chat.ejs'), { name: room_mate, messages: chat, room: room_id, page: room_page, rooms: user_rooms });
 });
 
 
