@@ -5,7 +5,6 @@ let socketOk = true;
 
 socket.on('message', (dt) => {
     let data = JSON.parse(dt);
-    console.log("message", data);
 });
 
 socket.on('checkback', (data) => {
@@ -102,8 +101,11 @@ let justalert = (data) =>{
     else{
         let other_users = document.querySelectorAll('.users')
         for (let i = 0; i < other_users.length; i++) {
+            console.log(other_users[i])
             if(data.user == other_users[i].value){
-                other_users[i].getElementsByClassName.backgroundcolor = "red";
+                console.log(other_users[i]);
+                other_users[i].style.backgroundColor = "bisque";
+                other_users[i].style.color = "black";
                 return true
             }
         }
@@ -112,6 +114,7 @@ let justalert = (data) =>{
 
 let createMSg2 = (data) => {
     if(!justalert(data)){
+    console.log(data);
     let msg_li = document.createElement('li');
     msg_li.classList.add('user2');
     msg_li.innerHTML = data.msg;
