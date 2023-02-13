@@ -10,6 +10,7 @@ socket.on('message', (dt) => {
 socket.on('checkback', (data) => {
     createMSg(data);
     socketOk = true;
+    console.log(data);
 });
 
 socket.on('newMsgCb', (data) => {
