@@ -63,8 +63,6 @@ io.on('connection', (socket) => {
 });
 
 
-
-
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
@@ -90,8 +88,11 @@ app.use(session({
 
 //register USER
 app.post('/register', (req, res) => {
-    functions.genUser(req.body);
-    res.redirect('/'); 
+    if (functions.genUser(req.body)) {
+        res.redirect('/'); 
+    } else {
+        res.redirect('/userAlreadyExists');
+    }
 });
 
 //login USER

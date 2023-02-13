@@ -169,12 +169,20 @@ let checkUser = async (data) => {
     else {return false;}
 }
 
+let usernameExists = async (username) => {
+    let sql = `SELECT * FROM users WHERE username = '${username}'`;
+    let result = await db.pls(sql);
+    if (result.rows.length > 0){return true;}
+    else {return false;}
+}
+
 //Reg user
 let genUser = (data) => {
     let username = data.username;
     let email = data.email;
     let password1 = data.password1;
     let password2 = data.password2;
+    if (usernameExists(username)) {return false;}
     if (password1 == password2) {
         let sql = `INSERT INTO users (username, password, email) VALUES ('${username}', '${password1}', '${email}')`;
         db.pls(sql, (err, res) => {if (err) {console.log(err);} else {console.log('User created');}});
