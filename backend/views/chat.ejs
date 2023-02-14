@@ -17,7 +17,7 @@
          <ul>
             <% for (let i = 0; i < rooms.length; i++) { %>
                <form class="center" action="/join" method="Post">
-                  <input type="hidden" name="room" value="<%= rooms[i].id %>">
+                  <input class="room_id" type="hidden" name="room" value="<%= rooms[i].id %>">
                   <input class="users" type="submit" value="<%= rooms[i].name %>">
                </form>
             <% } %>

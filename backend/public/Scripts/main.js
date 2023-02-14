@@ -96,18 +96,21 @@ let genHistory = (data) => {
 
 let justalert = (data) =>{
     // i need to get the room id from front end
-    let user2 = document.querySelector('#name')
-    if(data.user == user2.innerHTML){
+    let user2 = document.getElementById('room');
+    if(data.room == user2.value){
         return false
     }
     else{
-        let other_users = document.querySelectorAll('.users')
+        let other_users = document.querySelectorAll('.room_id')
+        let buttons = document.querySelectorAll('.users')
+        console.log(other_users);
         for (let i = 0; i < other_users.length; i++) {
-            console.log(other_users[i])
-            if(data.user == other_users[i].value){
-                console.log(other_users[i]);
-                other_users[i].style.backgroundColor = "bisque";
-                other_users[i].style.color = "black";
+            console.log(i);
+            console.log(other_users[i].style)
+            if(data.room == other_users[i].value){
+                console.log(data.room == other_users[i].value);
+                buttons[i].style.backgroundColor = "bisque";
+                buttons[i].style.color = "black";
                 return true
             }
         }
