@@ -95,6 +95,7 @@ let genHistory = (data) => {
 }
 
 let justalert = (data) =>{
+    // i need to get the room id from front end
     let user2 = document.querySelector('#name')
     if(data.user == user2.innerHTML){
         return false
