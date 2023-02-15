@@ -66,7 +66,7 @@ io.on('connection', (socket) => {
 const auth = require('./modules/auth');
 const functions = require('./modules/functions');
 const db = require('./modules/db');
-//const arduino = require('./modules/arduino');
+const arduino = require('./modules/arduino');
 
 
 app.set('view engine', 'ejs');
