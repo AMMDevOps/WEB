@@ -147,9 +147,7 @@ let send = () => {
 }
 
 let pageUp = () => {
-    if (socketOk == false) {
-        return;
-    }
+    if (socketOk == false) {return;}
     socketOk = false;
     let room = document.getElementById('room').value;
     let data = document.getElementById('page').innerHTML;
